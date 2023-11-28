@@ -54,7 +54,7 @@ public class LoadingScreen extends ScreenAdapter {
         GdxUtils.clearScreen();
         viewport.apply();
         renderer.setProjectionMatrix(camera.combined);
-        renderer.begin();
+        renderer.begin(ShapeRenderer.ShapeType.Filled);
 
         draw();
 
