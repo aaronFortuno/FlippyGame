@@ -1,0 +1,139 @@
+
+gameplay.png
+size: 984, 559
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+background
+  rotate: false
+  xy: 2, 77
+  size: 800, 480
+  orig: 800, 480
+  offset: 0, 0
+  index: -1
+medalBronze
+  rotate: false
+  xy: 804, 438
+  size: 114, 119
+  orig: 114, 119
+  offset: 0, 0
+  index: -1
+medalGold
+  rotate: false
+  xy: 804, 317
+  size: 114, 119
+  orig: 114, 119
+  offset: 0, 0
+  index: -1
+medalSilver
+  rotate: false
+  xy: 804, 196
+  size: 114, 119
+  orig: 114, 119
+  offset: 0, 0
+  index: -1
+planeBlue1
+  rotate: false
+  xy: 2, 2
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1
+planeBlue2
+  rotate: false
+  xy: 92, 2
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1
+planeBlue3
+  rotate: false
+  xy: 182, 2
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1
+planeGreen1
+  rotate: false
+  xy: 272, 2
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1
+planeGreen2
+  rotate: false
+  xy: 362, 2
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1
+planeGreen3
+  rotate: false
+  xy: 452, 2
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1
+planeRed1
+  rotate: false
+  xy: 542, 2
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1
+planeRed2
+  rotate: false
+  xy: 632, 2
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1
+planeRed3
+  rotate: false
+  xy: 722, 2
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1
+planeYellow1
+  rotate: false
+  xy: 804, 121
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1
+planeYellow2
+  rotate: false
+  xy: 812, 46
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1
+planeYellow3
+  rotate: false
+  xy: 894, 121
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1
+starBronze
+  rotate: false
+  xy: 812, 6
+  size: 39, 38
+  orig: 39, 38
+  offset: 0, 0
+  index: -1
+starGold
+  rotate: false
+  xy: 920, 519
+  size: 39, 38
+  orig: 39, 38
+  offset: 0, 0
+  index: -1
+starSilver
+  rotate: false
+  xy: 902, 81
+  size: 39, 38
+  orig: 39, 38
+  offset: 0, 0
+  index: -1
