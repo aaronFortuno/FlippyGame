@@ -1,6 +1,8 @@
 package net.estemon.studio.entity;
 
-public class Background {
+import net.estemon.studio.screens.game.Scrollable;
+
+public class Background extends Scrollable {
 
     private float x;
     private float y;
@@ -8,7 +10,15 @@ public class Background {
     private float width;
     private float height;
 
-    public Background() {}
+    // Static constructor
+    public Background() {
+        super();
+    }
+
+    // Scrollable constructor
+    public Background(float x, float y, float width, float height, float velocity) {
+        super(x, y, width, height, velocity);
+    }
 
     public void setPosition(float x, float y) {
         this.x = x;

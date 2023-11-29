@@ -13,4 +13,7 @@ public class GameConfig {
 
     public static final float PLAYER_BOUNDS_RADIUS = 0.4f; // world units
     public static final float PLAYER_SIZE = 2 * PLAYER_BOUNDS_RADIUS; // world units
+    public static final float PLAYER_WORLD_PADDING = 0.1f; // world units
+
+    public static final float MAX_PLAYER_Y_SPEED = 0.1f; // world units
 }
