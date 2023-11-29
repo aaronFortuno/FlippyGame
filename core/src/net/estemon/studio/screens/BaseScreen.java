@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.estemon.studio.FlippyGame;
 import net.estemon.studio.config.GameConfig;
+import net.estemon.studio.utils.GdxUtils;
 
 public abstract class BaseScreen extends ScreenAdapter {
 
@@ -31,10 +32,30 @@ public abstract class BaseScreen extends ScreenAdapter {
         stage = new Stage(viewport, game.getBatch());
 
         Gdx.input.setInputProcessor(stage);
-        stage.addActor(createUi());
+        stage.addActor(createUi()); // UNCOMMENT WHEN READY TO ADD ACTOR
     }
 
     protected abstract Actor createUi();
 
-    // TODO base
+    @Override
+    public void render(float delta) {
+        GdxUtils.clearScreen();
+        stage.act();
+        stage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        viewport.update(width,height, true);
+    }
+
+    @Override
+    public void hide() {
+        dispose();
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+    }
 }
