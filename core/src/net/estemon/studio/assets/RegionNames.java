@@ -4,4 +4,5 @@ public class RegionNames {
     private RegionNames() {} // not instantiable
 
     public static final String BACKGROUND = "background";
+    public static final String PLAYER = "planeGreen1";
 }

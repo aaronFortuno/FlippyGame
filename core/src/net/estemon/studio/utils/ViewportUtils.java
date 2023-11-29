@@ -40,13 +40,6 @@ public class ViewportUtils {
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.setColor(Color.WHITE);
 
-        // Log to console
-        boolean printLn = true;
-        if (printLn) {
-            System.out.println("[drawGrid] ready to draw lines");
-            printLn = false;
-        }
-
         // Draw vertical lines
         for (int x = -doubleWorldWidth; x < doubleWorldWidth; x += cellSize) {
             renderer.line(x, -doubleWorldHeight, x, doubleWorldHeight);

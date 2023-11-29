@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import net.estemon.studio.assets.AssetDescriptors;
 import net.estemon.studio.assets.RegionNames;
 import net.estemon.studio.config.GameConfig;
+import net.estemon.studio.entity.Background;
+import net.estemon.studio.entity.Player;
 import net.estemon.studio.utils.GdxUtils;
 import net.estemon.studio.utils.ViewportUtils;
 import net.estemon.studio.utils.debug.DebugCameraController;
@@ -37,6 +39,7 @@ public class GameRenderer implements Disposable {
     private final SpriteBatch batch;
 
     private TextureRegion backgroundRegion;
+    private TextureRegion playerRegion;
 
     public GameRenderer(SpriteBatch batch, AssetManager assetManager, GameController controller) {
         this.batch = batch;
@@ -60,6 +63,7 @@ public class GameRenderer implements Disposable {
         TextureAtlas gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS);
 
         backgroundRegion = gameplayAtlas.findRegion(RegionNames.BACKGROUND);
+        playerRegion = gameplayAtlas.findRegion(RegionNames.PLAYER);
     }
 
     // Public methods
@@ -69,7 +73,8 @@ public class GameRenderer implements Disposable {
 
         GdxUtils.clearScreen();
 
-        // TODO Render gameplay (before ui)
+        // TODO Finish render ui (enemies)
+        renderGamePlay();
 
         // TODO Render ui
 
@@ -89,6 +94,30 @@ public class GameRenderer implements Disposable {
     }
 
     // Private methods
+    private void renderGamePlay() {
+        viewport.apply();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+
+        // TODO Draw background
+        Background background = controller.getBackground();
+        batch.draw(backgroundRegion,
+                GameConfig.WORLD_CENTER_X - background.getWidth() / 2,
+                background.getY(),
+                background.getWidth(), background.getHeight()
+                );
+
+        // Draw player
+        Player player = controller.getPlayer();
+        batch.draw(playerRegion,
+                player.getX(), player.getY(),
+                player.getWidth(), player.getHeight()
+        );
+
+        batch.end();
+    }
+
+
     private void renderDebug() {
         viewport.apply();
         renderer.setProjectionMatrix(camera.combined);
