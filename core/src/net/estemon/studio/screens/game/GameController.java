@@ -1,6 +1,5 @@
 package net.estemon.studio.screens.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
@@ -36,7 +35,7 @@ public class GameController {
     private Music music;
     private Sound propellerSound;
     private long engine1;
-    private long engine2;
+    private long engine;
 
     private final AssetManager assetManager;
 
@@ -72,12 +71,9 @@ public class GameController {
 
         // TODO init sounds
         propellerSound = assetManager.get(AssetDescriptors.SOUND_PROPELLER);
-        //engine1 = propellerSound.loop();
-        //propellerSound.setPitch(engine1, 1f);
-
-        engine2 = propellerSound.loop();
-        propellerSound.setVolume(engine2, 0.5f);
-        propellerSound.setPitch(engine2, 1f);
+        engine = propellerSound.loop();
+        propellerSound.setVolume(engine, 0.4f);
+        propellerSound.setPitch(engine, 1f);
 
         // propellerSound.play();
     }
@@ -86,17 +82,13 @@ public class GameController {
         // TODO handle game over
 
         updatePlayer(delta);
-
+        updateEnemies(delta);
 
     }
-
-
 
     public Background getBackground() { return background; }
     public Player getPlayer() { return player; }
     public float getRotationAngle() { return rotationAngle; }
-
-
 
     // Private methods
     private void updatePlayer(float delta) {
@@ -116,8 +108,9 @@ public class GameController {
         blockPlayerFromLeavingTheWorld();
 
         float pitchValue = mapYSpeedToPitch(ySpeed);
-        propellerSound.setPitch(engine2, pitchValue);
+        propellerSound.setPitch(engine, pitchValue);
     }
+
     private float mapYSpeedToPitch(float ySpeed) {
         float normalizedSpeed = (ySpeed + GameConfig.MAX_PLAYER_Y_SPEED) / GameConfig.MAX_PLAYER_Y_SPEED;
         float pitch = GameConfig.PROPELLER_PITCH_MIN / 2 + (GameConfig.PROPELLER_PITCH_MAX - GameConfig.PROPELLER_PITCH_MIN) * normalizedSpeed;
@@ -176,5 +169,10 @@ public class GameController {
         );
 
         player.setPosition(player.getX(), playerY);
+    }
+
+    // enemies
+    private void updateEnemies(float delta) {
+        // TODO enemies logic
     }
 }

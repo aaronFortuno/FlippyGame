@@ -40,7 +40,6 @@ public class GameRenderer implements Disposable {
     private final SpriteBatch batch;
 
     private TextureRegion backgroundRegion;
-    private TextureRegion backgroundRegion2;
     private float backgroundX;
     private float backgroundX2;
     private boolean drawStatic;
@@ -69,7 +68,6 @@ public class GameRenderer implements Disposable {
         TextureAtlas gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS);
 
         backgroundRegion = gameplayAtlas.findRegion(RegionNames.BACKGROUND);
-        backgroundRegion2 = gameplayAtlas.findRegion(RegionNames.BACKGROUND);
         backgroundX = 0;
         backgroundX2 = 12;
         
@@ -125,11 +123,10 @@ public class GameRenderer implements Disposable {
 
         drawBackground(); // uncomment to draw bg textures
         drawPlayer(); // uncomment to draw plane textures
+        drawEnemies();
 
         batch.end();
     }
-
-
 
     private void drawBackground() {
         if (drawStatic) {
@@ -166,6 +163,10 @@ public class GameRenderer implements Disposable {
                 GameConfig.PLAYER_SIZE, GameConfig.PLAYER_SIZE,
                 rotationAngle
         );
+    }
+
+    private void drawEnemies() {
+        // TODO render enemies
     }
 
     private void renderDebug() {
