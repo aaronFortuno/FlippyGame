@@ -123,8 +123,8 @@ public class GameRenderer implements Disposable {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
-        // drawBackground(); // uncomment to draw bg textures
-        // drawPlayer(); // uncomment to draw plane textures
+        drawBackground(); // uncomment to draw bg textures
+        drawPlayer(); // uncomment to draw plane textures
 
         batch.end();
     }
@@ -156,10 +156,15 @@ public class GameRenderer implements Disposable {
     }
 
     private void drawPlayer() {
+        // get plane rotation angle to draw it accordingly to its ySpeed
+        float rotationAngle = controller.getRotationAngle();
         Player player = controller.getPlayer();
         batch.draw(playerRegion,
                 player.getX(), player.getY(),
-                player.getWidth(), player.getHeight()
+                player.getWidth() / 2, player.getHeight() / 2,
+                player.getWidth(), player.getHeight(),
+                GameConfig.PLAYER_SIZE, GameConfig.PLAYER_SIZE,
+                rotationAngle
         );
     }
 

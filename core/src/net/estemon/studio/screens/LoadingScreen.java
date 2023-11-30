@@ -45,6 +45,8 @@ public class LoadingScreen extends ScreenAdapter {
 
         // load required assets
         assetManager.load(AssetDescriptors.GAMEPLAY_ATLAS);
+        assetManager.load(AssetDescriptors.GAME_MUSIC);
+        assetManager.load(AssetDescriptors.SOUND_PROPELLER);
         assetManager.finishLoading();
     }
 

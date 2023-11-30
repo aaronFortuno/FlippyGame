@@ -25,6 +25,9 @@ public class GameConfig {
     public static final int PLANE_MAX_ANGLE = 20;
     public static final int PLANE_MIN_ANGLE = -PLANE_MAX_ANGLE;
 
+    // sound effects values
+    public static final float PROPELLER_PITCH_MIN = 0.5f;
+    public static final float PROPELLER_PITCH_MAX = 1f;
 
     public static final int BACKGROUND_SPEED = 1;
 }
