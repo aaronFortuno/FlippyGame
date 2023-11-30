@@ -1,8 +1,8 @@
 package net.estemon.studio.screens.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import net.estemon.studio.assets.Animations;
 import net.estemon.studio.assets.AssetDescriptors;
 import net.estemon.studio.assets.RegionNames;
 import net.estemon.studio.config.GameConfig;
@@ -46,6 +47,10 @@ public class GameRenderer implements Disposable {
 
     private TextureRegion playerRegion;
 
+    public static TextureRegion[] player;
+    public static Animation playerAnim;
+    public static float propellerAnimationTime = 0f;
+
     public GameRenderer(SpriteBatch batch, AssetManager assetManager, GameController controller) {
         this.batch = batch;
         this.assetManager = assetManager;
@@ -72,6 +77,7 @@ public class GameRenderer implements Disposable {
         backgroundX2 = 12;
         
         playerRegion = gameplayAtlas.findRegion(RegionNames.PLAYER);
+        Animations.planeAnimation(assetManager);
     }
 
     // Public methods
@@ -83,6 +89,7 @@ public class GameRenderer implements Disposable {
 
         // TODO Finish render ui (enemies)
         updateBackground(delta);
+        propellerAnimationTime += delta;
         renderGamePlay();
 
         // TODO Render ui
@@ -156,7 +163,8 @@ public class GameRenderer implements Disposable {
         // get plane rotation angle to draw it accordingly to its ySpeed
         float rotationAngle = controller.getRotationAngle();
         Player player = controller.getPlayer();
-        batch.draw(playerRegion,
+        TextureRegion currentFrame = (TextureRegion) playerAnim.getKeyFrame(propellerAnimationTime, true);
+        batch.draw(currentFrame,
                 player.getX(), player.getY(),
                 player.getWidth() / 2, player.getHeight() / 2,
                 player.getWidth(), player.getHeight(),
@@ -164,6 +172,7 @@ public class GameRenderer implements Disposable {
                 rotationAngle
         );
     }
+
 
     private void drawEnemies() {
         // TODO render enemies
