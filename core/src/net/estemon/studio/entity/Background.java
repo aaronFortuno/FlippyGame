@@ -1,5 +1,12 @@
 package net.estemon.studio.entity;
 
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+
+import net.estemon.studio.assets.AssetDescriptors;
 import net.estemon.studio.screens.game.Scrollable;
 
 public class Background extends Scrollable {
@@ -10,14 +17,29 @@ public class Background extends Scrollable {
     private float width;
     private float height;
 
+    private Stage stage;
+    private TextureRegion background;
+
     // Static constructor
     public Background() {
         super();
     }
 
     // Scrollable constructor
-    public Background(float x, float y, float width, float height, float velocity) {
+    public Background(float x, float y, float width, float height, float velocity, AssetManager assetManager) {
         super(x, y, width, height, velocity);
+        System.out.println("[Background]");
+        stage = getStage();
+        background = assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS).findRegion("background");
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        batch.disableBlending();
+        System.out.println("[Background.draw()]");
+        batch.draw(background, position.x, position.y, width, height);
+        batch.enableBlending();
     }
 
     public void setPosition(float x, float y) {

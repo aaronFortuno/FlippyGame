@@ -2,6 +2,7 @@ package net.estemon.studio.entity;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Vector2;
 
 public abstract class PlaneBase {
 
@@ -17,8 +18,16 @@ public abstract class PlaneBase {
         bounds = new Circle(x, y, boundsRadius);
     }
 
-    public void drawDebug(ShapeRenderer renderer) {
+    public void drawDebug(ShapeRenderer renderer, float rotationAngle) {
         renderer.circle(bounds.x, bounds.y, bounds.radius, 30);
+        // System.out.println("[drawDebug] rotationAngle: " + rotationAngle); // debug output
+        float radiusLine = bounds.radius;
+        double radiusLineX = bounds.x + radiusLine * Math.cos(Math.toRadians(rotationAngle));
+        double radiusLineY = bounds.y + radiusLine * Math.sin(Math.toRadians(rotationAngle));
+        renderer.line(
+                getBounds().x, getBounds().y,
+                (float) radiusLineX, (float) radiusLineY);
+
     }
 
     public void setPosition(float x, float y) {

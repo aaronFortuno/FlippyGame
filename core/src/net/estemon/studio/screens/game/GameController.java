@@ -1,6 +1,5 @@
 package net.estemon.studio.screens.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
@@ -15,7 +14,11 @@ import net.estemon.studio.entity.Player;
 public class GameController {
 
     private Background background;
+
     private Player player;
+    private float rotationAngle = GameConfig.PLANE_NORMAL_ANGLE; // initial rotation angle
+    private float ySpeed = 0;
+
     // TODO obstacles
 
     private float obstacleTimer;
@@ -60,26 +63,51 @@ public class GameController {
     public void update(float delta) {
         // TODO handle game over
 
-        updatePlayer();
+        updatePlayer(delta);
     }
 
     public Background getBackground() { return background; }
     public Player getPlayer() { return player; }
+    public float getRotationAngle() { return rotationAngle; }
 
 
     // Private methods
-    private void updatePlayer() {
-        float ySpeed = 0;
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            ySpeed = GameConfig.MAX_PLAYER_Y_SPEED;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            ySpeed = -GameConfig.MAX_PLAYER_Y_SPEED;
-        }
+    private void updatePlayer(float delta) {
+        float ySpeedCurrent = 0;
 
+        boolean isGoingUp = Gdx.input.isKeyPressed(Input.Keys.UP);
+        boolean isGoingDown = Gdx.input.isKeyPressed(Input.Keys.DOWN);
+
+        if (isGoingUp) {
+            goUp(delta);
+        } else if (isGoingDown) {
+            goDown(delta);
+        } else {
+            goStraight(delta);
+        }
 
         player.setY(player.getY() + ySpeed);
         blockPlayerFromLeavingTheWorld();
+    }
+
+    private void goUp(float delta) {
+        ySpeed += delta * GameConfig.PLAYER_ACCELERATION_Y;
+        rotationAngle += delta * GameConfig.PLANE_ROTATION_SPEED;
+        rotationAngle = Math.min(rotationAngle, GameConfig.PLANE_MAX_ANGLE);
+    }
+
+    private void goDown(float delta) {
+        ySpeed -= delta * GameConfig.PLAYER_ACCELERATION_Y;
+        rotationAngle -= delta * GameConfig.PLANE_ROTATION_SPEED;
+        rotationAngle = Math.max(rotationAngle, GameConfig.PLANE_MIN_ANGLE);
+    }
+
+    private void goStraight(float delta) {
+        if (rotationAngle > 0) {
+            goDown(delta);
+        } else if (rotationAngle < 0) {
+            goUp(delta);
+        }
     }
 
     private void blockPlayerFromLeavingTheWorld() {

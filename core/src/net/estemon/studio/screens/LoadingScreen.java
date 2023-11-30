@@ -45,6 +45,7 @@ public class LoadingScreen extends ScreenAdapter {
 
         // load required assets
         assetManager.load(AssetDescriptors.GAMEPLAY_ATLAS);
+        assetManager.finishLoading();
     }
 
     @Override

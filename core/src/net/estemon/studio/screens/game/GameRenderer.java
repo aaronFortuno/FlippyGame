@@ -1,5 +1,6 @@
 package net.estemon.studio.screens.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -39,6 +40,11 @@ public class GameRenderer implements Disposable {
     private final SpriteBatch batch;
 
     private TextureRegion backgroundRegion;
+    private TextureRegion backgroundRegion2;
+    private float backgroundX;
+    private float backgroundX2;
+    private boolean drawStatic;
+
     private TextureRegion playerRegion;
 
     public GameRenderer(SpriteBatch batch, AssetManager assetManager, GameController controller) {
@@ -63,6 +69,10 @@ public class GameRenderer implements Disposable {
         TextureAtlas gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS);
 
         backgroundRegion = gameplayAtlas.findRegion(RegionNames.BACKGROUND);
+        backgroundRegion2 = gameplayAtlas.findRegion(RegionNames.BACKGROUND);
+        backgroundX = 0;
+        backgroundX2 = 12;
+        
         playerRegion = gameplayAtlas.findRegion(RegionNames.PLAYER);
     }
 
@@ -74,12 +84,26 @@ public class GameRenderer implements Disposable {
         GdxUtils.clearScreen();
 
         // TODO Finish render ui (enemies)
+        updateBackground(delta);
         renderGamePlay();
 
         // TODO Render ui
 
         // Render debug graphics
         renderDebug();
+    }
+
+    private void updateBackground(float delta) {
+        backgroundX -= delta * GameConfig.BACKGROUND_SPEED;
+        backgroundX2 -= delta * GameConfig.BACKGROUND_SPEED;
+
+        if (backgroundX + GameConfig.WORLD_WIDTH <= 0) {
+            backgroundX = GameConfig.WORLD_WIDTH;
+        }
+
+        if (backgroundX2 + GameConfig.WORLD_WIDTH <= 0) {
+            backgroundX2 = backgroundX + GameConfig.WORLD_WIDTH;
+        }
     }
 
     public void resize(int width, int height) {
@@ -99,36 +123,50 @@ public class GameRenderer implements Disposable {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
-        // TODO Draw background
-        Background background = controller.getBackground();
-        batch.draw(backgroundRegion,
-                GameConfig.WORLD_CENTER_X - background.getWidth() / 2,
-                background.getY(),
-                background.getWidth(), background.getHeight()
-                );
-
-        // Draw player
-        Player player = controller.getPlayer();
-        batch.draw(playerRegion,
-                player.getX(), player.getY(),
-                player.getWidth(), player.getHeight()
-        );
+        // drawBackground(); // uncomment to draw bg textures
+        // drawPlayer(); // uncomment to draw plane textures
 
         batch.end();
     }
 
 
+
+    private void drawBackground() {
+        if (drawStatic) {
+            Background background = controller.getBackground();
+            batch.draw(backgroundRegion,
+                    GameConfig.WORLD_CENTER_X - background.getWidth() / 2,
+                    background.getY(),
+                    background.getWidth(), background.getHeight()
+            );
+        } else {
+            batch.draw(backgroundRegion,
+                    backgroundX,
+                    0,
+                    GameConfig.WORLD_WIDTH + 0.1f, // overlap backgrounds to avoid black synchro lines
+                    GameConfig.WORLD_HEIGHT
+            );
+            batch.draw(backgroundRegion,
+                    backgroundX2,
+                    0,
+                    GameConfig.WORLD_WIDTH + 0.1f, // overlap backgrounds to avoid black synchro lines
+                    GameConfig.WORLD_HEIGHT)
+            ;
+        }
+    }
+
+    private void drawPlayer() {
+        Player player = controller.getPlayer();
+        batch.draw(playerRegion,
+                player.getX(), player.getY(),
+                player.getWidth(), player.getHeight()
+        );
+    }
+
     private void renderDebug() {
         viewport.apply();
         renderer.setProjectionMatrix(camera.combined);
         renderer.begin(ShapeRenderer.ShapeType.Line);
-
-/*        // Log to console
-        boolean printLn = true;
-        if (printLn) {
-            System.out.println("[renderDebug] inside ShapeRenderer");
-            printLn = false;
-        }*/
 
         drawDebug();
 
@@ -137,6 +175,7 @@ public class GameRenderer implements Disposable {
     }
 
     private void drawDebug() {
-
+        float rotationAngle = controller.getRotationAngle();
+        controller.getPlayer().drawDebug(renderer, rotationAngle);
     }
 }
