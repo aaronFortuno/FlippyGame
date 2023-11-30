@@ -123,7 +123,7 @@ public class GameRenderer implements Disposable {
 
     public void resize(int width, int height) {
         viewport.update(width, height, true);
-        // TODO resize ui
+        uiViewport.update(width, height, true);
         ViewportUtils.debugPixelPerUnit(viewport);
     }
 
@@ -141,8 +141,8 @@ public class GameRenderer implements Disposable {
         batch.begin();
 
         // drawBackground(); // uncomment to draw bg textures
-        drawPlayer(); // uncomment to draw plane textures
-        drawEnemies();
+        drawPlayer(); // uncomment to draw player textures
+        drawEnemies(); // uncomment to draw enemy planes textures
 
         batch.end();
     }
@@ -172,7 +172,7 @@ public class GameRenderer implements Disposable {
     }
 
     private void drawPlayer() {
-        // get plane rotation angle to draw it accordingly to its ySpeed
+        // Get plane rotation angle to draw it accordingly to its ySpeed
         float rotationAngle = controller.getRotationAngle();
         Player player = controller.getPlayer();
         TextureRegion currentFrame = (TextureRegion) playerAnim.getKeyFrame(propellerAnimationTime, true);
