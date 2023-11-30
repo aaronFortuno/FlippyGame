@@ -23,8 +23,11 @@ public class GameConfig {
     public static final float PLAYER_ACCELERATION_Y = 0.1f;
 
     // enemies values
-    public static final float ENEMY_MIN_SIZE = 0.6f;
-    public static final float ENEMY_MAX_SIZE = 1.2f;
+    public static final float ENEMY_MIN_SIZE = 1f;
+    public static final float ENEMY_MAX_SIZE = 1.5f;
+    public static final float ENEMY_EASY_SPEED = 0.1f;
+    public static final float ENEMY_SPAWN_TIME = 1f;
+    public static final int ENEMY_MAX_COUNT = 10;
 
     // plane rotation
     public static final float PLANE_ROTATION_SPEED = 100f;

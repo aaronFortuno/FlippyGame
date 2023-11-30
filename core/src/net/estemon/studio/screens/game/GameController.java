@@ -6,11 +6,15 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pools;
 
 import net.estemon.studio.FlippyGame;
 import net.estemon.studio.assets.AssetDescriptors;
 import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Background;
+import net.estemon.studio.entity.Enemy;
 import net.estemon.studio.entity.Player;
 
 public class GameController {
@@ -21,20 +25,19 @@ public class GameController {
     private float rotationAngle = GameConfig.PLANE_NORMAL_ANGLE; // initial rotation angle
     private float ySpeed = 0;
 
-    // TODO obstacles
-
-    private float obstacleTimer;
+    private final Array<Enemy> enemies = new Array<>();
+    private float enemyTimer;
     private float scoreTimer;
+    private Pool<Enemy> enemiesPool;
 
     // TODO lives
     private int score;
     private int displayScore;
 
-    // TODO obstacle pool
+
     private Sound hit;
     private Music music;
     private Sound propellerSound;
-    private long engine1;
     private long engine;
 
     private final AssetManager assetManager;
@@ -53,7 +56,8 @@ public class GameController {
         float startPlayerY = GameConfig.WORLD_HEIGHT / 2 - (GameConfig.PLAYER_SIZE / 2);
         player.setPosition(startPlayerX, startPlayerY);
 
-        // TODO init obstacle pool
+        // Init obstacle pool
+        enemiesPool = Pools.get(Enemy.class, GameConfig.ENEMY_MAX_COUNT);
 
         // Init background
         background = new Background();
@@ -63,16 +67,16 @@ public class GameController {
                 GameConfig.WORLD_HEIGHT
         );
 
-        // TODO init music
+
         music = assetManager.get(AssetDescriptors.GAME_MUSIC);
         music.setLooping(true);
         music.setVolume(1f);
         music.play();
 
-        // TODO init sounds
+
         propellerSound = assetManager.get(AssetDescriptors.SOUND_PROPELLER);
         engine = propellerSound.loop();
-        propellerSound.setVolume(engine, 0.4f);
+        propellerSound.setVolume(engine, 0.35f);
         propellerSound.setPitch(engine, 1f);
 
         // propellerSound.play();
@@ -83,14 +87,17 @@ public class GameController {
 
         updatePlayer(delta);
         updateEnemies(delta);
-
     }
 
     public Background getBackground() { return background; }
     public Player getPlayer() { return player; }
+    public Array<Enemy> getEnemies() { return enemies; }
     public float getRotationAngle() { return rotationAngle; }
 
+
     // Private methods
+
+    // Player
     private void updatePlayer(float delta) {
         // Handle going up/down
         boolean isGoingUp = Gdx.input.isKeyPressed(Input.Keys.UP);
@@ -173,6 +180,42 @@ public class GameController {
 
     // enemies
     private void updateEnemies(float delta) {
-        // TODO enemies logic
+        for (Enemy enemy : enemies) {
+            enemy.update();
+        }
+        System.out.println("[updateEnemies] pool size: " + enemies.size);
+        createNewEnemy(delta);
+        removePassedEnemies();
+    }
+
+    private void createNewEnemy(float delta) {
+        enemyTimer += delta;
+        if (enemyTimer >= GameConfig.ENEMY_SPAWN_TIME) {
+            float min = 0f + GameConfig.ENEMY_MIN_SIZE / 2;
+            float max = GameConfig.WORLD_HEIGHT - GameConfig.ENEMY_MIN_SIZE / 2;
+            float enemyX = GameConfig.WORLD_WIDTH;
+            float enemyY = MathUtils.random(min, max);
+
+            Enemy enemy = enemiesPool.obtain();
+
+            enemy.setXSpeed(GameConfig.ENEMY_EASY_SPEED);
+            enemy.setPosition(enemyX, enemyY);
+
+            enemies.add(enemy);
+            enemyTimer = 0f;
+        }
+    }
+
+    private void removePassedEnemies() {
+        if (enemies.size > 0) {
+            Enemy first = enemies.first();
+
+            float minEnemyX = -GameConfig.ENEMY_MIN_SIZE;
+
+            if (first.getX() < minEnemyX) {
+                enemies.removeValue(first, true);
+                enemiesPool.free(first);
+            }
+        }
     }
 }

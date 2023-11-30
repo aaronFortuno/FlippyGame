@@ -20,14 +20,13 @@ public abstract class PlaneBase {
 
     public void drawDebug(ShapeRenderer renderer, float rotationAngle) {
         renderer.circle(bounds.x, bounds.y, bounds.radius, 30);
-        // System.out.println("[drawDebug] rotationAngle: " + rotationAngle); // debug output
         float radiusLine = bounds.radius;
         double radiusLineX = bounds.x + radiusLine * Math.cos(Math.toRadians(rotationAngle));
         double radiusLineY = bounds.y + radiusLine * Math.sin(Math.toRadians(rotationAngle));
         renderer.line(
                 getBounds().x, getBounds().y,
-                (float) radiusLineX, (float) radiusLineY);
-
+                (float) radiusLineX, (float) radiusLineY
+        );
     }
 
     public void setPosition(float x, float y) {

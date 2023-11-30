@@ -18,6 +18,7 @@ import net.estemon.studio.assets.AssetDescriptors;
 import net.estemon.studio.assets.RegionNames;
 import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Background;
+import net.estemon.studio.entity.Enemy;
 import net.estemon.studio.entity.Player;
 import net.estemon.studio.utils.GdxUtils;
 import net.estemon.studio.utils.ViewportUtils;
@@ -49,6 +50,9 @@ public class GameRenderer implements Disposable {
 
     public static TextureRegion[] player;
     public static Animation playerAnim;
+
+    public static TextureRegion[] enemy;
+    public static Animation enemyAnim;
     public static float propellerAnimationTime = 0f;
 
     public GameRenderer(SpriteBatch batch, AssetManager assetManager, GameController controller) {
@@ -77,7 +81,8 @@ public class GameRenderer implements Disposable {
         backgroundX2 = 12;
         
         playerRegion = gameplayAtlas.findRegion(RegionNames.PLAYER);
-        Animations.planeAnimation(assetManager);
+        Animations.playerPlaneAnimation(assetManager);
+        Animations.enemyPlaneAnimation(assetManager);
     }
 
     // Public methods
@@ -154,8 +159,8 @@ public class GameRenderer implements Disposable {
                     backgroundX2,
                     0,
                     GameConfig.WORLD_WIDTH + 0.1f, // overlap backgrounds to avoid black synchro lines
-                    GameConfig.WORLD_HEIGHT)
-            ;
+                    GameConfig.WORLD_HEIGHT
+            );
         }
     }
 
@@ -176,6 +181,14 @@ public class GameRenderer implements Disposable {
 
     private void drawEnemies() {
         // TODO render enemies
+        for (Enemy enemy : controller.getEnemies()) {
+            TextureRegion currentFrame = (TextureRegion) enemyAnim.getKeyFrame(propellerAnimationTime, true);
+            batch.draw(currentFrame,
+                    enemy.getX(), enemy.getY(),
+                    enemy.getWidth() / 2, enemy.getHeight() / 2,
+                    enemy.getWidth(), enemy.getHeight(),
+                    GameConfig.ENEMY_MIN_SIZE, GameConfig.ENEMY_MIN_SIZE, 0);
+        }
     }
 
     private void renderDebug() {
@@ -192,5 +205,8 @@ public class GameRenderer implements Disposable {
     private void drawDebug() {
         float rotationAngle = controller.getRotationAngle();
         controller.getPlayer().drawDebug(renderer, rotationAngle);
+        for (Enemy enemy : controller.getEnemies()) {
+            enemy.drawDebug(renderer);
+        }
     }
 }
