@@ -46,5 +46,5 @@ public class GameConfig {
     public static final int BACKGROUND_SPEED = 1;
 
     // scoring
-    public static final float SCORE_MAX_TIME = 0.5f;
+    public static final float SCORE_MAX_TIME = 1f;
 }

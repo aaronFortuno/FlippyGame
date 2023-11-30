@@ -252,6 +252,7 @@ public class GameController {
         scoreTimer += delta;
         if (scoreTimer >= GameConfig.SCORE_MAX_TIME) {
             score += MathUtils.random(1, 5);
+            scoreTimer = 0f;
         }
     }
 
