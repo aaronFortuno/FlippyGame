@@ -74,7 +74,7 @@ public class GameController {
         music = assetManager.get(AssetDescriptors.GAME_MUSIC);
         music.setLooping(true);
         music.setVolume(1f);
-        // music.play(); // uncomment to play music
+        music.play(); // uncomment to play music
 
 
         propellerSound = assetManager.get(AssetDescriptors.SOUND_PROPELLER);

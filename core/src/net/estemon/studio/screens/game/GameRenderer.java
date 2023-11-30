@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -209,8 +210,9 @@ public class GameRenderer implements Disposable {
         font.draw(
                 batch,
                 scoreText,
-                layout.width + 20,
-                GameConfig.UI_HEIGHT - layout.height
+                layout.width + 5,
+                GameConfig.UI_HEIGHT - layout.height,
+                150, Align.left, false
         );
 
         batch.end();
