@@ -1,6 +1,5 @@
 package net.estemon.studio.assets;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -21,7 +20,7 @@ public class Animations {
             GameRenderer.player[i] = gameplayAtlas.findRegion(regionName);
         }
 
-        GameRenderer.playerAnim = new Animation(0.03f, GameRenderer.player);
+        GameRenderer.playerAnim = new Animation<>(0.03f, GameRenderer.player);
         GameRenderer.playerAnim.setPlayMode(Animation.PlayMode.LOOP);
     }
 
@@ -34,7 +33,7 @@ public class Animations {
             GameRenderer.enemy[i] = gameplayAtlas.findRegion(regionName);
         }
 
-        GameRenderer.enemyAnim = new Animation(0.03f, GameRenderer.enemy);
+        GameRenderer.enemyAnim = new Animation<>(0.03f, GameRenderer.enemy);
         GameRenderer.playerAnim.setPlayMode(Animation.PlayMode.LOOP);
     }
 }

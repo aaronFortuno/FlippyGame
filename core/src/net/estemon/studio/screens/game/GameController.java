@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Pools;
 
 import net.estemon.studio.FlippyGame;
 import net.estemon.studio.assets.AssetDescriptors;
+import net.estemon.studio.common.GameManager;
 import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Background;
 import net.estemon.studio.entity.Enemy;
@@ -27,10 +28,12 @@ public class GameController {
 
     private final Array<Enemy> enemies = new Array<>();
     private float enemyTimer;
-    private float scoreTimer;
     private Pool<Enemy> enemiesPool;
 
-    // TODO lives
+
+    private float scoreTimer;
+
+    private int lives = GameConfig.PLAYER_START_LIVES;
     private int score;
     private int displayScore;
 
@@ -76,28 +79,50 @@ public class GameController {
 
         propellerSound = assetManager.get(AssetDescriptors.SOUND_PROPELLER);
         engine = propellerSound.loop();
-        propellerSound.setVolume(engine, 0.35f);
+        propellerSound.setVolume(engine, 0.4f);
         propellerSound.setPitch(engine, 1f);
-
-        // propellerSound.play();
     }
 
     public void update(float delta) {
         // TODO handle game over
-
         updatePlayer(delta);
         updateEnemies(delta);
+        updateScore(delta);
+        updateDisplayScore(delta);
+        if (isPlayerCollidingWithEnemy()) {
+            lives--;
+            if (isGameOver()) {
+                GameManager.INSTANCE.updateHighScore(score);
+            }
+        }
     }
 
+    // Getters
     public Background getBackground() { return background; }
     public Player getPlayer() { return player; }
     public Array<Enemy> getEnemies() { return enemies; }
     public float getRotationAngle() { return rotationAngle; }
+    public int getLives() { return lives; }
+    public int getDisplayScore() { return displayScore; }
+
+    public boolean isGameOver() {
+        return lives <= 0;
+    }
 
 
     // Private methods
 
-    // Player
+    /************** PLAYER ***************/
+    private boolean isPlayerCollidingWithEnemy() {
+        for (Enemy enemy : enemies) {
+            if (enemy.isNotHit() && enemy.isPlayerColliding(player)) {
+                System.out.println("HIT!");
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void updatePlayer(float delta) {
         // Handle going up/down
         boolean isGoingUp = Gdx.input.isKeyPressed(Input.Keys.UP);
@@ -178,12 +203,12 @@ public class GameController {
         player.setPosition(player.getX(), playerY);
     }
 
-    // enemies
+    /************** ENEMIES ***************/
     private void updateEnemies(float delta) {
         for (Enemy enemy : enemies) {
             enemy.update();
         }
-        System.out.println("[updateEnemies] pool size: " + enemies.size);
+
         createNewEnemy(delta);
         removePassedEnemies();
     }
@@ -191,8 +216,8 @@ public class GameController {
     private void createNewEnemy(float delta) {
         enemyTimer += delta;
         if (enemyTimer >= GameConfig.ENEMY_SPAWN_TIME) {
-            float min = 0f + GameConfig.ENEMY_MIN_SIZE / 2;
-            float max = GameConfig.WORLD_HEIGHT - GameConfig.ENEMY_MIN_SIZE / 2;
+            float min = 0f + GameConfig.ENEMY_SIZE / 2;
+            float max = GameConfig.WORLD_HEIGHT - GameConfig.ENEMY_SIZE / 2;
             float enemyX = GameConfig.WORLD_WIDTH;
             float enemyY = MathUtils.random(min, max);
 
@@ -210,12 +235,28 @@ public class GameController {
         if (enemies.size > 0) {
             Enemy first = enemies.first();
 
-            float minEnemyX = -GameConfig.ENEMY_MIN_SIZE;
+            float minEnemyX = -GameConfig.ENEMY_SIZE;
 
             if (first.getX() < minEnemyX) {
                 enemies.removeValue(first, true);
                 enemiesPool.free(first);
             }
+        }
+    }
+
+    /************** SCORING ***************/
+    private void updateScore(float delta) {
+        scoreTimer += delta;
+        if (scoreTimer >= GameConfig.SCORE_MAX_TIME) {
+            score += MathUtils.random(1, 5);
+        }
+    }
+
+    private void updateDisplayScore(float delta) {
+        if (displayScore < score) {
+            displayScore = Math.min(score,
+                    displayScore + (int) (60 * delta)
+            );
         }
     }
 }

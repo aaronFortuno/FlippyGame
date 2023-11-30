@@ -28,7 +28,6 @@ public class Background extends Scrollable {
     // Scrollable constructor
     public Background(float x, float y, float width, float height, float velocity, AssetManager assetManager) {
         super(x, y, width, height, velocity);
-        System.out.println("[Background]");
         stage = getStage();
         background = assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS).findRegion("background");
     }
@@ -37,7 +36,6 @@ public class Background extends Scrollable {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         batch.disableBlending();
-        System.out.println("[Background.draw()]");
         batch.draw(background, position.x, position.y, width, height);
         batch.enableBlending();
     }

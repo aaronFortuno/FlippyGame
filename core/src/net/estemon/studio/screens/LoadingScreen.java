@@ -44,6 +44,8 @@ public class LoadingScreen extends ScreenAdapter {
         renderer = new ShapeRenderer();
 
         // load required assets
+        assetManager.load(AssetDescriptors.UI_FONT_REGULAR);
+        assetManager.load(AssetDescriptors.UI_FONT_OUTLINE);
         assetManager.load(AssetDescriptors.GAMEPLAY_ATLAS);
         assetManager.load(AssetDescriptors.GAME_MUSIC);
         assetManager.load(AssetDescriptors.SOUND_PROPELLER);

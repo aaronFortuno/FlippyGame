@@ -1,6 +1,7 @@
 package net.estemon.studio.screens.game;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -68,7 +69,10 @@ public class GameRenderer implements Disposable {
         viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera);
         renderer = new ShapeRenderer();
 
-        // TODO ui view
+        // UI view
+        uiCamera = new OrthographicCamera();
+        uiViewport = new FitViewport(GameConfig.UI_WIDTH, GameConfig.UI_HEIGHT, uiCamera);
+        font = assetManager.get(AssetDescriptors.UI_FONT_REGULAR);
 
         // Create debug camera controller
         debugCameraController = new DebugCameraController();
@@ -92,12 +96,13 @@ public class GameRenderer implements Disposable {
 
         GdxUtils.clearScreen();
 
-        // TODO Finish render ui (enemies)
+        // Render scroll background and gameplay
         updateBackground(delta);
         propellerAnimationTime += delta;
         renderGamePlay();
 
-        // TODO Render ui
+        // Render UI (over gameplay)
+        renderUi();
 
         // Render debug graphics
         renderDebug();
@@ -128,12 +133,14 @@ public class GameRenderer implements Disposable {
     }
 
     // Private methods
+
+    /************** GAMEPLAY ***************/
     private void renderGamePlay() {
         viewport.apply();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
-        drawBackground(); // uncomment to draw bg textures
+        // drawBackground(); // uncomment to draw bg textures
         drawPlayer(); // uncomment to draw plane textures
         drawEnemies();
 
@@ -187,10 +194,30 @@ public class GameRenderer implements Disposable {
                     enemy.getX(), enemy.getY(),
                     enemy.getWidth() / 2, enemy.getHeight() / 2,
                     enemy.getWidth(), enemy.getHeight(),
-                    GameConfig.ENEMY_MIN_SIZE, GameConfig.ENEMY_MIN_SIZE, 0);
+                    GameConfig.ENEMY_SIZE, GameConfig.ENEMY_SIZE, 0);
         }
     }
 
+    /************** UI ***************/
+    private void renderUi() {
+        uiViewport.apply();
+        batch.setProjectionMatrix(uiCamera.combined);
+        batch.begin();
+
+        String scoreText = "SCORE: " + controller.getDisplayScore();
+        layout.setText(font, scoreText);
+        font.draw(
+                batch,
+                scoreText,
+                layout.width + 20,
+                GameConfig.UI_HEIGHT - layout.height
+        );
+
+        batch.end();
+    }
+
+
+    /************** DEBUG ***************/
     private void renderDebug() {
         viewport.apply();
         renderer.setProjectionMatrix(camera.combined);
