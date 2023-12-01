@@ -1,7 +1,7 @@
 {
   "BitmapFont": {
     "default-font": {
-      "file": "fonts/zyzol-regular.fnt"
+      "file": "fonts/zyzol-regular.fnt",
     }
   },
   "Color": {
@@ -37,7 +37,6 @@
   "LabelStyle": {
     "default": {
       "font": "default-font",
-      "fontColor": "black"
     },
     "high-score": {
       "font": "default-font",

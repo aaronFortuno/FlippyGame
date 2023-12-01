@@ -1,8 +1,10 @@
 package net.estemon.studio.screens.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -27,7 +29,6 @@ public class GameRenderer implements Disposable {
     private OrthographicCamera camera;
     private Viewport viewport;
     private ShapeRenderer renderer;
-
     private Viewport uiViewport;
 
 
@@ -41,8 +42,12 @@ public class GameRenderer implements Disposable {
     private float backgroundX2;
     private boolean drawStatic;
 
+    private ParticleEffect particleEffect1;
+    private ParticleEffect particleEffect2;
+
     public static TextureRegion[] player;
     public static Animation playerAnim;
+
 
     public static TextureRegion[] enemy;
     public static Animation enemyAnim;
@@ -80,6 +85,18 @@ public class GameRenderer implements Disposable {
         
         Animations.playerPlaneAnimation(assetManager);
         Animations.enemyPlaneAnimation(assetManager);
+
+        particleEffect1 = new ParticleEffect();
+        particleEffect1.load(Gdx.files.internal("particles/particle1.p"), gameplayAtlas);
+        particleEffect1.scaleEffect(0.005f);
+        particleEffect1.setPosition(0, 0);
+        particleEffect1.start();
+
+        particleEffect2 = new ParticleEffect();
+        particleEffect2.load(Gdx.files.internal("particles/particle2.p"), gameplayAtlas);
+        particleEffect2.scaleEffect(0.02f);
+        particleEffect2.setPosition(0, 0);
+        particleEffect2.start();
     }
 
     // Public methods
@@ -92,7 +109,7 @@ public class GameRenderer implements Disposable {
         // Render scroll background and gameplay
         updateBackground(delta);
         propellerAnimationTime += delta;
-        renderGamePlay();
+        renderGamePlay(delta);
 
         // Render debug graphics
         // renderDebug();
@@ -125,16 +142,26 @@ public class GameRenderer implements Disposable {
     // Private methods
 
     /************** GAMEPLAY ***************/
-    private void renderGamePlay() {
+    private void renderGamePlay(float delta) {
         viewport.apply();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
         drawBackground(); // uncomment to draw bg textures
-        drawPlayer(); // uncomment to draw player textures
+        drawPlayer(delta); // uncomment to draw player textures
         drawEnemies(); // uncomment to draw enemy planes textures
 
+        int lives = controller.getLives();
+        if (lives < GameConfig.PLAYER_START_LIVES) {
+            particleEffect1.draw(batch, delta);
+            if (lives <= 1) {
+                particleEffect2.draw(batch, delta);
+            }
+        }
+
         batch.end();
+
+
     }
 
     private void drawBackground() {
@@ -161,7 +188,7 @@ public class GameRenderer implements Disposable {
         }
     }
 
-    private void drawPlayer() {
+    private void drawPlayer(float delta) {
         // Get plane rotation angle to draw it accordingly to its ySpeed
         float rotationAngle = controller.getRotationAngle();
         Player player = controller.getPlayer();
@@ -173,6 +200,17 @@ public class GameRenderer implements Disposable {
                 GameConfig.PLAYER_SIZE, GameConfig.PLAYER_SIZE,
                 rotationAngle
         );
+        int lives = controller.getLives();
+        if (lives < GameConfig.PLAYER_START_LIVES) {
+            float particleX = player.getBounds().x;
+            float particleY = player.getBounds().y;
+            particleEffect1.setPosition(particleX, particleY);
+            particleEffect1.update(delta);
+            if (lives <= 1) {
+                particleEffect2.setPosition(particleX + 0.2f, particleY);
+                particleEffect2.update(delta);
+            }
+        }
     }
 
 

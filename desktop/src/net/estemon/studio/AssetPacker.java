@@ -5,7 +5,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 public class AssetPacker {
 
     private static final boolean DRAW_DEBUG_OUTLINE = false;
-    private static final String RAW_ASSETS_PATH = "assets/ui"; // origin
+    private static final String RAW_ASSETS_PATH = "assets/new"; // origin
     private static final String ASSETS_PATH = "assets"; // destination
 
     public static void main(String[] args) {
@@ -19,7 +19,7 @@ public class AssetPacker {
                 settings,
                 RAW_ASSETS_PATH,
                 ASSETS_PATH,
-                "ui-skin" // atlas name
+                "gameplay" // atlas name
         );
     }
 }

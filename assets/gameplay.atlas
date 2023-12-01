@@ -32,6 +32,20 @@ medalSilver
   orig: 114, 119
   offset: 0, 0
   index: -1
+part1
+  rotate: false
+  xy: 920, 506
+  size: 51, 51
+  orig: 51, 51
+  offset: 0, 0
+  index: -1
+part2
+  rotate: false
+  xy: 902, 68
+  size: 51, 51
+  orig: 51, 51
+  offset: 0, 0
+  index: -1
 planeBlue1
   rotate: false
   xy: 2, 2
@@ -125,14 +139,14 @@ starBronze
   index: -1
 starGold
   rotate: false
-  xy: 920, 519
+  xy: 920, 466
   size: 39, 38
   orig: 39, 38
   offset: 0, 0
   index: -1
 starSilver
   rotate: false
-  xy: 902, 81
+  xy: 853, 6
   size: 39, 38
   orig: 39, 38
   offset: 0, 0
