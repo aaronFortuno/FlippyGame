@@ -1,6 +1,5 @@
 package net.estemon.studio.screens.game;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 

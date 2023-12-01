@@ -5,15 +5,12 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.estemon.studio.FlippyGame;
-import net.estemon.studio.assets.AssetPaths;
 import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Background;
-import net.estemon.studio.screens.game.ScrollHandler;
 import net.estemon.studio.utils.GdxUtils;
 
 public abstract class BaseScreen extends ScreenAdapter {
@@ -21,11 +18,8 @@ public abstract class BaseScreen extends ScreenAdapter {
     protected final FlippyGame game;
     protected final AssetManager assetManager;
 
-    private ScrollHandler scrollHandler;
-
     private Viewport viewport;
     private Stage stage;
-    // private Skin skin;
 
     public BaseScreen(FlippyGame game) {
         this.game = game;
@@ -43,8 +37,6 @@ public abstract class BaseScreen extends ScreenAdapter {
 
         Gdx.input.setInputProcessor(stage);
         stage.addActor(createUi()); // UNCOMMENT WHEN READY TO ADD ACTOR
-
-        scrollHandler = new ScrollHandler(assetManager);
     }
 
     protected abstract Actor createUi();

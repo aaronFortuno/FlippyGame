@@ -39,7 +39,6 @@ public class GameController {
 
 
     private Sound hit;
-    private Music music;
     private Sound propellerSound;
     private long engine;
 
@@ -70,12 +69,10 @@ public class GameController {
                 GameConfig.WORLD_HEIGHT
         );
 
-
-        music = assetManager.get(AssetDescriptors.GAME_MUSIC);
+        Music music = assetManager.get(AssetDescriptors.GAME_MUSIC);
         music.setLooping(true);
         music.setVolume(1f);
         music.play(); // uncomment to play music
-
 
         propellerSound = assetManager.get(AssetDescriptors.SOUND_PROPELLER);
         engine = propellerSound.loop();

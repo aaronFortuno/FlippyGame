@@ -1,19 +1,12 @@
 package net.estemon.studio.screens.game;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -35,24 +28,18 @@ public class GameRenderer implements Disposable {
     private Viewport viewport;
     private ShapeRenderer renderer;
 
-    private OrthographicCamera uiCamera;
     private Viewport uiViewport;
-    private BitmapFont font;
 
-    private final GlyphLayout layout = new GlyphLayout();
 
     private DebugCameraController debugCameraController;
     private final GameController controller;
     private final AssetManager assetManager;
     private final SpriteBatch batch;
-    private Skin skin;
 
     private TextureRegion backgroundRegion;
     private float backgroundX;
     private float backgroundX2;
     private boolean drawStatic;
-
-    private TextureRegion playerRegion;
 
     public static TextureRegion[] player;
     public static Animation playerAnim;
@@ -61,6 +48,7 @@ public class GameRenderer implements Disposable {
     public static Animation enemyAnim;
     public static float propellerAnimationTime = 0f;
 
+    // Getter for UiRenderer
     public Viewport getUiViewport() { return uiViewport; }
 
     public GameRenderer(SpriteBatch batch, AssetManager assetManager, GameController controller) {
@@ -77,10 +65,8 @@ public class GameRenderer implements Disposable {
         renderer = new ShapeRenderer();
 
         // UI view
-        uiCamera = new OrthographicCamera();
+        OrthographicCamera uiCamera = new OrthographicCamera();
         uiViewport = new FitViewport(GameConfig.UI_WIDTH, GameConfig.UI_HEIGHT, uiCamera);
-        font = assetManager.get(AssetDescriptors.UI_FONT_REGULAR);
-        skin = assetManager.get(AssetDescriptors.UI_SKIN);
 
         // Create debug camera controller
         debugCameraController = new DebugCameraController();
@@ -92,7 +78,6 @@ public class GameRenderer implements Disposable {
         backgroundX = 0;
         backgroundX2 = 12;
         
-        playerRegion = gameplayAtlas.findRegion(RegionNames.PLAYER);
         Animations.playerPlaneAnimation(assetManager);
         Animations.enemyPlaneAnimation(assetManager);
     }
@@ -108,9 +93,6 @@ public class GameRenderer implements Disposable {
         updateBackground(delta);
         propellerAnimationTime += delta;
         renderGamePlay();
-
-        // Render UI (over gameplay)
-        renderUi();
 
         // Render debug graphics
         // renderDebug();
@@ -204,43 +186,6 @@ public class GameRenderer implements Disposable {
                     enemy.getWidth(), enemy.getHeight(),
                     GameConfig.ENEMY_SIZE, GameConfig.ENEMY_SIZE, 0);
         }
-    }
-
-    /************** UI ***************/
-    private void renderUi() {
-        uiViewport.apply();
-        batch.setProjectionMatrix(uiCamera.combined);
-        batch.begin();
-
-        // Functional version with limited layout options
-        /* String scoreText = "SCORE: " + controller.getDisplayScore();
-        layout.setText(font, scoreText);
-        font.draw(
-                batch,
-                scoreText,
-                layout.width + 5,
-                GameConfig.UI_HEIGHT - layout.height,
-                250, Align.left, false
-        ); */
-
-        batch.end();
-    }
-
-    // Skin needs Stage!
-    private void drawTable() {
-        Table table = new Table();
-        String scoreText = "SCORE: " + controller.getDisplayScore();
-        Label score = new Label(scoreText, skin);
-
-        Table contentTable = new Table();
-        contentTable.debugAll().defaults().pad(20);
-        contentTable.add(score);
-        contentTable.left();
-
-        table.add(contentTable);
-        table.left();
-        table.setFillParent(true);
-        table.pack();
     }
 
     /************** DEBUG ***************/
