@@ -14,43 +14,40 @@ import net.estemon.studio.utils.GdxUtils;
 
 public class UiRenderer extends ScreenAdapter {
 
-
     private GameController controller;
     private Stage stage;
     private Skin skin;
+    private Label scoreLabel;
 
     public UiRenderer(AssetManager assetManager, Viewport uiViewport, GameController controller) {
         this.stage = new Stage(uiViewport);
         this.skin = assetManager.get(AssetDescriptors.UI_SKIN);
         this.controller = controller;
+        createUi();
     }
 
+    private void createUi() {
+        Table table = new Table();
+        table.top().left();
+        table.setFillParent(true);
+
+        scoreLabel = new Label("SCORE: ", skin);
+
+        table.add(scoreLabel).pad(20).padLeft(150f);
+        table.debugAll();
+
+        stage.addActor(table);
+    }
     @Override
     public void render(float delta) {
-        drawTable();
+        String scoreText = "SCORE: " + controller.getDisplayScore();
+        scoreLabel.setText(scoreText);
+
         stage.act();
         stage.draw();
     }
 
-    private void drawTable() {
-        Table table = new Table();
-        String scoreText = "SCORE: " + controller.getDisplayScore();
-        Label score = new Label(scoreText, skin);
-
-        Table contentTable = new Table();
-        contentTable.debugAll().defaults().pad(20);
-        contentTable.add(score);
-        contentTable.left();
-
-        table.add(contentTable);
-        table.left();
-        table.setFillParent(true);
-        table.pack();
-
-        stage.addActor(table);
-    }
-
     @Override
-    public void dispose() {  }
+    public void dispose() { stage.dispose(); }
 
 }
