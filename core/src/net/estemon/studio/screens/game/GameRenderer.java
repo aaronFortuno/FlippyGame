@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -42,6 +45,7 @@ public class GameRenderer implements Disposable {
     private final GameController controller;
     private final AssetManager assetManager;
     private final SpriteBatch batch;
+    private Skin skin;
 
     private TextureRegion backgroundRegion;
     private float backgroundX;
@@ -56,6 +60,8 @@ public class GameRenderer implements Disposable {
     public static TextureRegion[] enemy;
     public static Animation enemyAnim;
     public static float propellerAnimationTime = 0f;
+
+    public Viewport getUiViewport() { return uiViewport; }
 
     public GameRenderer(SpriteBatch batch, AssetManager assetManager, GameController controller) {
         this.batch = batch;
@@ -74,6 +80,7 @@ public class GameRenderer implements Disposable {
         uiCamera = new OrthographicCamera();
         uiViewport = new FitViewport(GameConfig.UI_WIDTH, GameConfig.UI_HEIGHT, uiCamera);
         font = assetManager.get(AssetDescriptors.UI_FONT_REGULAR);
+        skin = assetManager.get(AssetDescriptors.UI_SKIN);
 
         // Create debug camera controller
         debugCameraController = new DebugCameraController();
@@ -205,19 +212,36 @@ public class GameRenderer implements Disposable {
         batch.setProjectionMatrix(uiCamera.combined);
         batch.begin();
 
-        String scoreText = "SCORE: " + controller.getDisplayScore();
+        // Functional version with limited layout options
+        /* String scoreText = "SCORE: " + controller.getDisplayScore();
         layout.setText(font, scoreText);
         font.draw(
                 batch,
                 scoreText,
                 layout.width + 5,
                 GameConfig.UI_HEIGHT - layout.height,
-                150, Align.left, false
-        );
+                250, Align.left, false
+        ); */
 
         batch.end();
     }
 
+    // Skin needs Stage!
+    private void drawTable() {
+        Table table = new Table();
+        String scoreText = "SCORE: " + controller.getDisplayScore();
+        Label score = new Label(scoreText, skin);
+
+        Table contentTable = new Table();
+        contentTable.debugAll().defaults().pad(20);
+        contentTable.add(score);
+        contentTable.left();
+
+        table.add(contentTable);
+        table.left();
+        table.setFillParent(true);
+        table.pack();
+    }
 
     /************** DEBUG ***************/
     private void renderDebug() {

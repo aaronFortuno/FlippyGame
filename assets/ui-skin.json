@@ -1,0 +1,57 @@
+{
+  "BitmapFont": {
+    "default-font": {
+      "file": "fonts/zyzol-regular.fnt"
+    }
+  },
+  "Color": {
+    "black": {
+      "a": 1,
+      "b": 0,
+      "g": 0,
+      "r": 0
+    },
+    "gray": {
+      "a": 1,
+      "b": 0.4,
+      "g": 0.4,
+      "r": 0.4
+    },
+    "blueish-gray": {
+      "a": 1,
+      "b": 0.7,
+      "g": 0.4,
+      "r": 0.4
+    }
+  },
+  "TextButtonStyle": {
+    "default": {
+      "down": "grey_button03",
+      "up": "grey_button01",
+      "font": "default-font",
+      "fontColor": "black",
+      "downFontColor": "blueish-gray",
+      "overFontColor": "gray"
+    }
+  },
+  "LabelStyle": {
+    "default": {
+      "font": "default-font",
+      "fontColor": "black"
+    },
+    "high-score": {
+      "font": "default-font",
+      "fontColor": "blueish-gray"
+    }
+  },
+  "CheckBoxStyle": {
+    "default": {
+      "down": "grey_button03",
+      "up": "grey_button01",
+      "checkboxOn": "grey_boxCheckmark",
+      "checkboxOff": "grey_box",
+      "font": "default-font",
+      "fontColor": "gray"
+    }
+  }
+}

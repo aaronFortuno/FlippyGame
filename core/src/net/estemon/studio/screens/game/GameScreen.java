@@ -13,6 +13,7 @@ public class GameScreen extends BaseScreen {
     private final AssetManager assetManager;
     private GameController controller;
     private GameRenderer renderer;
+    private UiRenderer uiRenderer;
 
     public GameScreen(FlippyGame game) {
         super(game);
@@ -23,6 +24,7 @@ public class GameScreen extends BaseScreen {
     public void show() {
         controller = new GameController(game);
         renderer = new GameRenderer(game.getBatch(), assetManager, controller);
+        uiRenderer = new UiRenderer(assetManager, renderer.getUiViewport(), controller);
     }
 
     @Override
@@ -34,6 +36,7 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         controller.update(delta);
         renderer.render(delta);
+        uiRenderer.render(delta);
 
         // TODO handle game over
     }

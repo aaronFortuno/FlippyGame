@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.estemon.studio.FlippyGame;
+import net.estemon.studio.assets.AssetPaths;
 import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Background;
 import net.estemon.studio.screens.game.ScrollHandler;
@@ -24,7 +25,7 @@ public abstract class BaseScreen extends ScreenAdapter {
 
     private Viewport viewport;
     private Stage stage;
-    private Skin skin;
+    // private Skin skin;
 
     public BaseScreen(FlippyGame game) {
         this.game = game;
@@ -34,6 +35,7 @@ public abstract class BaseScreen extends ScreenAdapter {
     public void show() {
         viewport = new FitViewport(GameConfig.GAME_WIDTH, GameConfig.GAME_HEIGHT);
         stage = new Stage(viewport, game.getBatch());
+        // skin = assetManager.get(AssetPaths.UI_SKIN);
 
         Background background = new Background(0, 0, 100, 100, 1, assetManager);
 
