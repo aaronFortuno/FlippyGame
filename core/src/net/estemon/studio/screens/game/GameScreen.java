@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import net.estemon.studio.FlippyGame;
 import net.estemon.studio.screens.common.BaseScreen;
+import net.estemon.studio.screens.menu.SplashScreen;
 
 public class GameScreen extends BaseScreen {
 
@@ -37,7 +38,10 @@ public class GameScreen extends BaseScreen {
         renderer.render(delta);
         uiRenderer.render(delta);
 
-        // TODO handle game over
+        if (controller.isGameOver()) {
+            controller.stopPropellerSound();
+            game.setScreen(new SplashScreen(game));
+        }
     }
 
     @Override

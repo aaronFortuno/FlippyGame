@@ -16,11 +16,14 @@ public class GameConfig {
 
     // common plane values
     public static final float PLANE_BOUNDS_RADIUS = 0.3f; // world units
+    public static final float PLANE_SIZE = 0.8f; // world units
 
 
     // player values
     public static final float PLAYER_SIZE = 0.8f; // world units
     public static final float PLAYER_WORLD_PADDING = 0.1f; // world units
+    public static final float PLAYER_MIN_Y_POS = PLAYER_SIZE / 2 + PLAYER_WORLD_PADDING;
+    public static final float PLAYER_MAX_Y_POS = WORLD_HEIGHT - PLAYER_SIZE / 2 - PLAYER_WORLD_PADDING;
 
     public static final float PLAYER_MAX_Y_SPEED = 0.1f; // world units
     public static final float PLAYER_ACCELERATION_Y = 0.1f;
@@ -40,7 +43,7 @@ public class GameConfig {
     public static final float ENEMY_HARD_MAX_Y_SPEED = 0.04f;
 
 
-    public static final float ENEMY_EASY_Y_ACCELERATION = 0.04f;
+    public static final float ENEMY_EASY_Y_ACCELERATION = 0.03f;
     public static final float ENEMY_MEDIUM_Y_ACCELERATION = 0.07f;
     public static final float ENEMY_HARD_Y_ACCELERATION = 0.1f;
 

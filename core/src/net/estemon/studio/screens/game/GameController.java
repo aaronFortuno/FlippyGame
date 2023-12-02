@@ -114,6 +114,10 @@ public class GameController {
     public int getLives() { return lives; }
     public int getDisplayScore() { return displayScore; }
 
+    public void stopPropellerSound() {
+        propellerSound.stop();
+    }
+
     public boolean isGameOver() {
         return lives <= 0;
     }
@@ -152,9 +156,17 @@ public class GameController {
             // Check if there's significative change
             if (Math.abs(deltaY) > 2) {
                 if (deltaY > 0) {
-                    goUp(delta);
+                    if (checkIfCanGoUp()) {
+                        goUp(delta);
+                    } else {
+                        goStraight(delta);
+                    }
                 } else {
-                    goDown(delta);
+                    if (checkIfCanGoDown()) {
+                        goDown(delta);
+                    } else {
+                        goStraight(delta);
+                    }
                 }
             }
 
@@ -167,9 +179,17 @@ public class GameController {
 
             // Handle keystrokes only if there's no touching screen or dragging player
             if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                goUp(delta);
+                if (checkIfCanGoUp()) {
+                    goUp(delta);
+                } else {
+                    goStraight(delta);
+                }
             } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                goDown(delta);
+                if (checkIfCanGoDown()) {
+                    goDown(delta);
+                } else {
+                    goStraight(delta);
+                }
             } else {
                 goStraight(delta);
             }
@@ -180,6 +200,14 @@ public class GameController {
 
         float pitchValue = mapYSpeedToPitch(ySpeed);
         propellerSound.setPitch(engine, pitchValue);
+    }
+
+    private boolean checkIfCanGoUp() {
+        return player.getBounds().y < GameConfig.PLAYER_MAX_Y_POS;
+    }
+
+    private boolean checkIfCanGoDown() {
+        return player.getBounds().y > GameConfig.PLAYER_MIN_Y_POS;
     }
 
     private float mapYSpeedToPitch(float ySpeed) {
@@ -267,20 +295,7 @@ public class GameController {
                     enemy.goUp(delta);
                 }
 
-                if (enemy.getTimer() > 1f) {
-                    if (MathUtils.randomBoolean()) {
-                        if (MathUtils.randomBoolean()) {
-                            enemy.setGoUp();
-                            enemy.goUp(delta);
-                        } else {
-                            enemy.setGoDown();
-                            enemy.goDown(delta);
-                        }
-                    } else {
-                        enemy.goStraight(delta);
-                    }
-                    enemy.setTimer(0f);
-                }
+                decideIfGoUpDownStraight(delta, enemy);
             }
 
             enemy.update(delta);
@@ -288,6 +303,23 @@ public class GameController {
 
         createNewEnemy(delta);
         removePassedEnemies();
+    }
+
+    private static void decideIfGoUpDownStraight(float delta, Enemy enemy) {
+        if (enemy.getTimer() > 1f) {
+            if (MathUtils.randomBoolean()) {
+                if (MathUtils.randomBoolean()) {
+                    enemy.setGoUp();
+                    enemy.goUp(delta);
+                } else {
+                    enemy.setGoDown();
+                    enemy.goDown(delta);
+                }
+            } else {
+                enemy.goStraight(delta);
+            }
+            enemy.setTimer(0f);
+        }
     }
 
     private void createNewEnemy(float delta) {

@@ -1,16 +1,19 @@
 package net.estemon.studio.entity;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+
+import net.estemon.studio.config.GameConfig;
 
 public abstract class PlaneBase {
 
     private float x;
     private float y;
 
-    private float width = 1;
-    private float height = 1;
+    private float width = GameConfig.PLANE_SIZE;
+    private float height = GameConfig.PLANE_SIZE;
 
     private final Circle bounds;
 
@@ -19,6 +22,8 @@ public abstract class PlaneBase {
     }
 
     public void drawDebug(ShapeRenderer renderer, float rotationAngle) {
+        Color oldColor = renderer.getColor();
+        renderer.setColor(Color.YELLOW);
         renderer.circle(bounds.x, bounds.y, bounds.radius, 30);
         float radiusLine = bounds.radius;
         double radiusLineX = bounds.x + radiusLine * Math.cos(Math.toRadians(rotationAngle));
@@ -27,6 +32,7 @@ public abstract class PlaneBase {
                 getBounds().x, getBounds().y,
                 (float) radiusLineX, (float) radiusLineY
         );
+        renderer.setColor(oldColor);
     }
 
     public void setPosition(float x, float y) {

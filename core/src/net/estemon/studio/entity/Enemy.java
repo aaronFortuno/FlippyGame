@@ -66,10 +66,7 @@ public class Enemy extends PlaneBase implements Pool.Poolable {
 
     public void drawDebug(ShapeRenderer renderer) {
         super.drawDebug(renderer, -180);
-        Color oldColor = renderer.getColor();
-        renderer.setColor(Color.BLUE);
         renderer.x(getBounds().x, getBounds().y, 0.1f);
-        renderer.setColor(oldColor);
     }
 
     public boolean isPlayerColliding(Player player) {

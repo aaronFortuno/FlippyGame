@@ -3,6 +3,7 @@ package net.estemon.studio.screens.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -123,7 +124,7 @@ public class GameRenderer implements Disposable {
         renderGamePlay(delta);
 
         // Render debug graphics
-        // renderDebug();
+        renderDebug();
     }
 
     public void updateBackground(float delta) {
@@ -158,7 +159,7 @@ public class GameRenderer implements Disposable {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
-        drawBackground(); // uncomment to draw bg textures
+        // drawBackground(); // uncomment to draw bg textures
         drawPlayer(delta); // uncomment to draw player textures
         drawEnemies(); // uncomment to draw enemy planes textures
 
@@ -241,6 +242,13 @@ public class GameRenderer implements Disposable {
         viewport.apply();
         renderer.setProjectionMatrix(camera.combined);
         renderer.begin(ShapeRenderer.ShapeType.Line);
+
+        Color oldColor = renderer.getColor();
+        renderer.setColor(Color.ORANGE);
+        renderer.line(0, controller.getPlayer().getBounds().y, GameConfig.WORLD_WIDTH, controller.getPlayer().getBounds().y);
+        renderer.line(0, GameConfig.PLAYER_MAX_Y_POS, GameConfig.WORLD_WIDTH, GameConfig.PLAYER_MAX_Y_POS);
+        renderer.line(0, GameConfig.PLAYER_MIN_Y_POS, GameConfig.WORLD_WIDTH, GameConfig.PLAYER_MIN_Y_POS);
+        renderer.setColor(oldColor);
 
         drawDebug();
 
