@@ -57,7 +57,6 @@ public class UiRenderer extends ScreenAdapter {
         }
 
         table.add(scoreLabel).pad(20).padLeft(150).expandX().left();
-        //table.add(levelLabel).pad(20).uniform().expandX();
         table.add(livesTable).pad(20);
 
         // table.debugAll();

@@ -29,11 +29,26 @@ public class GameConfig {
     // enemies values
     public static final boolean IS_ENEMY_MOVING_Y = true;
     public static final float ENEMY_SIZE = 0.8f;
-    public static final float ENEMY_EASY_MAX_Y_SPEED = 0.03f;
 
     public static final float ENEMY_EASY_X_SPEED = 0.05f;
-    public static final float ENEMY_ACCELERATION_Y = 0.04f;
-    public static final float ENEMY_SPAWN_TIME = 1f;
+    public static final float ENEMY_MEDIUM_X_SPEED = 0.07f;
+    public static final float ENEMY_HARD_X_SPEED = 0.09f;
+
+
+    public static final float ENEMY_EASY_MAX_Y_SPEED = 0.02f;
+    public static final float ENEMY_MEDIUM_MAX_Y_SPEED = 0.03f;
+    public static final float ENEMY_HARD_MAX_Y_SPEED = 0.04f;
+
+
+    public static final float ENEMY_EASY_Y_ACCELERATION = 0.04f;
+    public static final float ENEMY_MEDIUM_Y_ACCELERATION = 0.07f;
+    public static final float ENEMY_HARD_Y_ACCELERATION = 0.1f;
+
+
+    public static final float ENEMY_EASY_SPAWN_TIME = 1f;
+    public static final float ENEMY_MEDIUM_SPAWN_TIME = 0.8f;
+    public static final float ENEMY_HARD_SPAWN_TIME = 0.6f;
+
     public static final int ENEMY_MAX_COUNT = 10;
 
     // plane rotation

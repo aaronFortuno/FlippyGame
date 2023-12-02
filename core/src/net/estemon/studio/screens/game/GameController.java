@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Pools;
 import net.estemon.studio.FlippyGame;
 import net.estemon.studio.assets.AssetDescriptors;
 import net.estemon.studio.common.GameManager;
+import net.estemon.studio.config.DifficultyLevel;
 import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Background;
 import net.estemon.studio.entity.Enemy;
@@ -290,8 +291,9 @@ public class GameController {
     }
 
     private void createNewEnemy(float delta) {
+        DifficultyLevel difficultyLevel = GameManager.INSTANCE.getDifficultyLevel();
         enemyTimer += delta;
-        if (enemyTimer >= GameConfig.ENEMY_SPAWN_TIME) {
+        if (enemyTimer >= difficultyLevel.getSpawnTime()) {
             float min = 0f + GameConfig.ENEMY_SIZE / 2;
             float max = GameConfig.WORLD_HEIGHT - GameConfig.ENEMY_SIZE / 2;
             float enemyX = GameConfig.WORLD_WIDTH;
@@ -299,7 +301,7 @@ public class GameController {
 
             Enemy enemy = enemiesPool.obtain();
 
-            enemy.setXSpeed(GameConfig.ENEMY_EASY_X_SPEED);
+            enemy.setXSpeed(difficultyLevel.getxSpeed());
             enemy.setPosition(enemyX, enemyY);
 
             enemies.add(enemy);
@@ -336,58 +338,4 @@ public class GameController {
             );
         }
     }
-
-/*    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        goStraight(1 / 60f);
-        return true;
-    }
-
-    @Override
-    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (Math.abs(previousY - screenY) > 2) {
-            if (previousY < screenY) {
-                goDown(1 / 60f);
-            } else {
-                goUp(1 /60f);
-            }
-        }
-        previousY = screenY;
-        return true;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(float amountX, float amountY) {
-        return false;
-    }*/
 }

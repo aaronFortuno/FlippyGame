@@ -6,11 +6,15 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.Pool;
 
+import net.estemon.studio.common.GameManager;
+import net.estemon.studio.config.DifficultyLevel;
 import net.estemon.studio.config.GameConfig;
 
 public class Enemy extends PlaneBase implements Pool.Poolable {
 
-    private float xSpeed = GameConfig.ENEMY_EASY_X_SPEED;
+    private DifficultyLevel difficultyLevel;
+
+    private float xSpeed;
     private float ySpeed;
     private boolean hit;
     private float timer = 0f;
@@ -47,10 +51,11 @@ public class Enemy extends PlaneBase implements Pool.Poolable {
     public Enemy() {
         super(GameConfig.PLANE_BOUNDS_RADIUS);
         setSize(GameConfig.ENEMY_SIZE, GameConfig.ENEMY_SIZE);
+        difficultyLevel = GameManager.INSTANCE.getDifficultyLevel();
     }
 
     public void update(float delta) {
-        setX(getX() - xSpeed);
+        setX(getX() - difficultyLevel.getxSpeed());
         setY(getY() + ySpeed);
         timer += delta;
     }
@@ -90,28 +95,30 @@ public class Enemy extends PlaneBase implements Pool.Poolable {
     }
 
     public void goUp(float delta) {
-        ySpeed += delta * GameConfig.ENEMY_ACCELERATION_Y;
+        ySpeed += delta * difficultyLevel.getyAcceleration();
 
     }
 
     public void goDown(float delta) {
-        ySpeed -= delta * GameConfig.ENEMY_ACCELERATION_Y;
+        ySpeed -= delta * difficultyLevel.getyAcceleration();
     }
 
     public void goStraight(float delta) {
         // Normalising y speed
+        DifficultyLevel difficultyLevel = GameManager.INSTANCE.getDifficultyLevel();
+        float maxYSpeed = difficultyLevel.getMaxYSpeed();
         if (ySpeed > 0) {
-            if (ySpeed > GameConfig.ENEMY_EASY_MAX_Y_SPEED) {
-                ySpeed = GameConfig.ENEMY_EASY_MAX_Y_SPEED;
+            if (ySpeed > maxYSpeed) {
+                ySpeed = maxYSpeed;
             } else {
-                ySpeed -= delta * GameConfig.ENEMY_ACCELERATION_Y;
+                ySpeed -= delta * difficultyLevel.getyAcceleration();
                 ySpeed = Math.max(ySpeed, 0);
             }
         } else if (ySpeed < 0) {
-            if (ySpeed < -GameConfig.ENEMY_EASY_MAX_Y_SPEED) {
-                ySpeed = -GameConfig.ENEMY_EASY_MAX_Y_SPEED;
+            if (ySpeed < -maxYSpeed) {
+                ySpeed = -maxYSpeed;
             } else {
-                ySpeed += delta * GameConfig.ENEMY_ACCELERATION_Y;
+                ySpeed += delta * difficultyLevel.getyAcceleration();
                 ySpeed = Math.min(ySpeed, 0);
             }
         }
