@@ -22,14 +22,17 @@ public class GameConfig {
     public static final float PLAYER_SIZE = 0.8f; // world units
     public static final float PLAYER_WORLD_PADDING = 0.1f; // world units
 
-    public static final float MAX_PLAYER_Y_SPEED = 0.1f; // world units
+    public static final float PLAYER_MAX_Y_SPEED = 0.1f; // world units
     public static final float PLAYER_ACCELERATION_Y = 0.1f;
     public static final int PLAYER_START_LIVES = 3;
 
     // enemies values
+    public static final boolean IS_ENEMY_MOVING_Y = true;
     public static final float ENEMY_SIZE = 0.8f;
+    public static final float ENEMY_EASY_MAX_Y_SPEED = 0.05f;
 
-    public static final float ENEMY_EASY_SPEED = 0.05f;
+    public static final float ENEMY_EASY_X_SPEED = 0.05f;
+    public static final float ENEMY_ACCELERATION_Y = 0.05f;
     public static final float ENEMY_SPAWN_TIME = 1f;
     public static final int ENEMY_MAX_COUNT = 10;
 

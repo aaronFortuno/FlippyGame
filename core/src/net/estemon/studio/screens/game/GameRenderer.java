@@ -123,7 +123,7 @@ public class GameRenderer implements Disposable {
         renderGamePlay(delta);
 
         // Render debug graphics
-        // renderDebug();
+        renderDebug();
     }
 
     private void updateBackground(float delta) {

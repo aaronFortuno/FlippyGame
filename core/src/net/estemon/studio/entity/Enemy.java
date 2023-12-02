@@ -10,16 +10,49 @@ import net.estemon.studio.config.GameConfig;
 
 public class Enemy extends PlaneBase implements Pool.Poolable {
 
-    private float xSpeed = GameConfig.ENEMY_EASY_SPEED;
+    private float xSpeed = GameConfig.ENEMY_EASY_X_SPEED;
+    private float ySpeed;
     private boolean hit;
+    private float timer = 0f;
+    private boolean goUp;
+    private boolean goDown;
+
+
+    public float getTimer() {
+        return timer;
+    }
+
+    public void setTimer(float timer) {
+        this.timer = timer;
+    }
+
+    public boolean isGoUp() {
+        return goUp;
+    }
+
+    public void setGoUp() {
+        goUp = true;
+        goDown = false;
+    }
+
+    public boolean isGoDown() {
+        return goDown;
+    }
+
+    public void setGoDown() {
+        goDown = true;
+        goUp = false;
+    }
 
     public Enemy() {
         super(GameConfig.PLANE_BOUNDS_RADIUS);
         setSize(GameConfig.ENEMY_SIZE, GameConfig.ENEMY_SIZE);
     }
 
-    public void update() {
+    public void update(float delta) {
         setX(getX() - xSpeed);
+        setY(getY() + ySpeed);
+        timer += delta;
     }
 
     public void setXSpeed(float xSpeed) {
@@ -50,5 +83,37 @@ public class Enemy extends PlaneBase implements Pool.Poolable {
     public void reset() {
         // Reset enemy hit to reuse at pooling
         hit = false;
+        timer = 0f;
+        goUp = false;
+        goDown = false;
+        ySpeed = 0;
+    }
+
+    public void goUp(float delta) {
+        ySpeed += delta * GameConfig.ENEMY_ACCELERATION_Y;
+
+    }
+
+    public void goDown(float delta) {
+        ySpeed -= delta * GameConfig.ENEMY_ACCELERATION_Y;
+    }
+
+    public void goStraight(float delta) {
+        // Normalising y speed
+        if (ySpeed > 0) {
+            if (ySpeed > GameConfig.ENEMY_EASY_MAX_Y_SPEED) {
+                ySpeed = GameConfig.ENEMY_EASY_MAX_Y_SPEED;
+            } else {
+                ySpeed -= delta * GameConfig.ENEMY_ACCELERATION_Y;
+                ySpeed = Math.max(ySpeed, 0);
+            }
+        } else if (ySpeed < 0) {
+            if (ySpeed < -GameConfig.ENEMY_EASY_MAX_Y_SPEED) {
+                ySpeed = -GameConfig.ENEMY_EASY_MAX_Y_SPEED;
+            } else {
+                ySpeed += delta * GameConfig.ENEMY_ACCELERATION_Y;
+                ySpeed = Math.min(ySpeed, 0);
+            }
+        }
     }
 }

@@ -2,14 +2,10 @@ package net.estemon.studio.screens.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
@@ -36,6 +32,7 @@ public class GameController {
     private final Array<Enemy> enemies = new Array<>();
     private float enemyTimer;
     private Pool<Enemy> enemiesPool;
+    private boolean isEnemyMovingY = GameConfig.IS_ENEMY_MOVING_Y;
 
 
     private float scoreTimer;
@@ -185,7 +182,7 @@ public class GameController {
     }
 
     private float mapYSpeedToPitch(float ySpeed) {
-        float normalizedSpeed = (ySpeed + GameConfig.MAX_PLAYER_Y_SPEED) / GameConfig.MAX_PLAYER_Y_SPEED;
+        float normalizedSpeed = (ySpeed + GameConfig.PLAYER_MAX_Y_SPEED) / GameConfig.PLAYER_MAX_Y_SPEED;
         float pitch = GameConfig.PROPELLER_PITCH_MIN / 2 + (GameConfig.PROPELLER_PITCH_MAX - GameConfig.PROPELLER_PITCH_MIN) * normalizedSpeed;
         if (pitch < GameConfig.PROPELLER_PITCH_MIN) {
             pitch = GameConfig.PROPELLER_PITCH_MIN;
@@ -194,6 +191,17 @@ public class GameController {
         }
         return pitch;
     }
+
+    private void blockPlayerFromLeavingTheWorld() {
+        float playerY = MathUtils.clamp(player.getY(),
+                0 + GameConfig.PLAYER_WORLD_PADDING,
+                GameConfig.WORLD_HEIGHT - player.getHeight() - GameConfig.PLAYER_WORLD_PADDING
+        );
+
+        player.setPosition(player.getX(), playerY);
+    }
+
+    /************** PLANE COMMON ***************/
 
     public void goUp(float delta) {
         ySpeed += delta * GameConfig.PLAYER_ACCELERATION_Y;
@@ -220,15 +228,15 @@ public class GameController {
 
         // Normalising y speed
         if (ySpeed > 0) {
-            if (ySpeed > GameConfig.MAX_PLAYER_Y_SPEED) {
-                ySpeed = GameConfig.MAX_PLAYER_Y_SPEED;
+            if (ySpeed > GameConfig.PLAYER_MAX_Y_SPEED) {
+                ySpeed = GameConfig.PLAYER_MAX_Y_SPEED;
             } else {
                 ySpeed -= delta * GameConfig.PLAYER_ACCELERATION_Y;
                 ySpeed = Math.max(ySpeed, 0);
             }
         } else if (ySpeed < 0) {
-            if (ySpeed < -GameConfig.MAX_PLAYER_Y_SPEED) {
-                ySpeed = -GameConfig.MAX_PLAYER_Y_SPEED;
+            if (ySpeed < -GameConfig.PLAYER_MAX_Y_SPEED) {
+                ySpeed = -GameConfig.PLAYER_MAX_Y_SPEED;
             } else {
                 ySpeed += delta * GameConfig.PLAYER_ACCELERATION_Y;
                 ySpeed = Math.min(ySpeed, 0);
@@ -236,19 +244,45 @@ public class GameController {
         }
     }
 
-    private void blockPlayerFromLeavingTheWorld() {
-        float playerY = MathUtils.clamp(player.getY(),
-                0 + GameConfig.PLAYER_WORLD_PADDING,
-                GameConfig.WORLD_HEIGHT - player.getHeight() - GameConfig.PLAYER_WORLD_PADDING
-        );
-
-        player.setPosition(player.getX(), playerY);
-    }
-
     /************** ENEMIES ***************/
     private void updateEnemies(float delta) {
         for (Enemy enemy : enemies) {
-            enemy.update();
+
+            // Move Y axis enemies depending on configuration
+            if (isEnemyMovingY) {
+                if (enemy.isGoUp()) {
+                    enemy.goUp(delta);
+                } else if (enemy.isGoDown()) {
+                    enemy.goDown(delta);
+                } else {
+                    enemy.goStraight(delta);
+                }
+
+                if (enemy.getBounds().y > GameConfig.WORLD_HEIGHT - 1) {
+                    enemy.setGoDown();
+                    enemy.goDown(delta);
+                } if (enemy.getBounds().y < 1) {
+                    enemy.setGoUp();
+                    enemy.goUp(delta);
+                }
+
+                if (enemy.getTimer() > 1f) {
+                    if (MathUtils.randomBoolean()) {
+                        if (MathUtils.randomBoolean()) {
+                            enemy.setGoUp();
+                            enemy.goUp(delta);
+                        } else {
+                            enemy.setGoDown();
+                            enemy.goDown(delta);
+                        }
+                    } else {
+                        enemy.goStraight(delta);
+                    }
+                    enemy.setTimer(0f);
+                }
+            }
+
+            enemy.update(delta);
         }
 
         createNewEnemy(delta);
@@ -265,7 +299,7 @@ public class GameController {
 
             Enemy enemy = enemiesPool.obtain();
 
-            enemy.setXSpeed(GameConfig.ENEMY_EASY_SPEED);
+            enemy.setXSpeed(GameConfig.ENEMY_EASY_X_SPEED);
             enemy.setPosition(enemyX, enemyY);
 
             enemies.add(enemy);
