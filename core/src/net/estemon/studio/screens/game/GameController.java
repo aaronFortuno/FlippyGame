@@ -2,10 +2,14 @@ package net.estemon.studio.screens.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
@@ -25,6 +29,9 @@ public class GameController {
     private Player player;
     private float rotationAngle = GameConfig.PLANE_NORMAL_ANGLE; // initial rotation angle
     private float ySpeed = 0;
+    private float inputY1;
+    private float inputY2;
+
 
     private final Array<Enemy> enemies = new Array<>();
     private float enemyTimer;
@@ -58,6 +65,10 @@ public class GameController {
         float startPlayerY = GameConfig.WORLD_HEIGHT / 2 - (GameConfig.PLAYER_SIZE / 2);
         player.setPosition(startPlayerX, startPlayerY);
 
+        // Init touch position
+        inputY1 = player.getBounds().y;
+        inputY2 = -1; // not touching
+
         // Init obstacle pool
         enemiesPool = Pools.get(Enemy.class, GameConfig.ENEMY_MAX_COUNT);
 
@@ -76,7 +87,7 @@ public class GameController {
 
         propellerSound = assetManager.get(AssetDescriptors.SOUND_PROPELLER);
         engine = propellerSound.loop();
-        propellerSound.setVolume(engine, 0.4f);
+        propellerSound.setVolume(engine, 0.45f);
         propellerSound.setPitch(engine, 1f);
     }
 
@@ -124,16 +135,46 @@ public class GameController {
     }
 
     private void updatePlayer(float delta) {
-        // Handle going up/down
-        boolean isGoingUp = Gdx.input.isKeyPressed(Input.Keys.UP);
-        boolean isGoingDown = Gdx.input.isKeyPressed(Input.Keys.DOWN);
 
-        if (isGoingUp) {
-            goUp(delta);
-        } else if (isGoingDown) {
-            goDown(delta);
+        // Handle going up/down
+        float screenHeight = Gdx.graphics.getHeight();
+        inputY1 = screenHeight - Gdx.input.getY(); // Inverse Y axis system
+        boolean isTouched = Gdx.input.isTouched();
+
+        if (isTouched) {
+
+            // Check if is first touching
+            if (inputY2 == -1) {
+                inputY2 = inputY1;
+            }
+
+            // Relative change at Y
+            float deltaY = inputY1 - inputY2;
+
+            // Check if there's significative change
+            if (Math.abs(deltaY) > 2) {
+                if (deltaY > 0) {
+                    goUp(delta);
+                } else {
+                    goDown(delta);
+                }
+            }
+
+            // Update inputY2 at end of touching
+            inputY2 = inputY1;
         } else {
-            goStraight(delta);
+
+            // Reset inputY2 if there's no touch
+            inputY2 = -1;
+
+            // Handle keystrokes only if there's no touching screen or dragging player
+            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                goUp(delta);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                goDown(delta);
+            } else {
+                goStraight(delta);
+            }
         }
 
         player.setY(player.getY() + ySpeed);
@@ -154,19 +195,20 @@ public class GameController {
         return pitch;
     }
 
-    private void goUp(float delta) {
+    public void goUp(float delta) {
         ySpeed += delta * GameConfig.PLAYER_ACCELERATION_Y;
         rotationAngle += delta * GameConfig.PLANE_ROTATION_SPEED;
         rotationAngle = Math.min(rotationAngle, GameConfig.PLANE_MAX_ANGLE);
     }
 
-    private void goDown(float delta) {
+    public void goDown(float delta) {
         ySpeed -= delta * GameConfig.PLAYER_ACCELERATION_Y;
         rotationAngle -= delta * GameConfig.PLANE_ROTATION_SPEED;
         rotationAngle = Math.max(rotationAngle, GameConfig.PLANE_MIN_ANGLE);
     }
 
-    private void goStraight(float delta) {
+
+    public void goStraight(float delta) {
         // Normalising rotation angle
         if (rotationAngle > 0) {
             rotationAngle -= delta * GameConfig.PLANE_ROTATION_SPEED;
@@ -260,4 +302,58 @@ public class GameController {
             );
         }
     }
+
+/*    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        goStraight(1 / 60f);
+        return true;
+    }
+
+    @Override
+    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        if (Math.abs(previousY - screenY) > 2) {
+            if (previousY < screenY) {
+                goDown(1 / 60f);
+            } else {
+                goUp(1 /60f);
+            }
+        }
+        previousY = screenY;
+        return true;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+        return false;
+    }*/
 }

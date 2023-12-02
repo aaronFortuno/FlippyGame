@@ -1,6 +1,7 @@
 package net.estemon.studio.screens.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -41,6 +43,8 @@ public class GameRenderer implements Disposable {
     private float backgroundX;
     private float backgroundX2;
     private boolean drawStatic;
+
+    private int previousY = 0;
 
     private ParticleEffect particleEffect1;
     private ParticleEffect particleEffect2;
@@ -103,6 +107,13 @@ public class GameRenderer implements Disposable {
     public void render(float delta) {
         debugCameraController.handleDebugInput(delta);
         debugCameraController.applyTo(camera);
+
+        if (Gdx.input.isTouched() && !controller.isGameOver()) {
+            Vector2 screenTouch = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+            Vector2 worldTouch = viewport.unproject(new Vector2(screenTouch));
+
+
+        }
 
         GdxUtils.clearScreen();
 
@@ -215,7 +226,6 @@ public class GameRenderer implements Disposable {
 
 
     private void drawEnemies() {
-        // TODO render enemies
         for (Enemy enemy : controller.getEnemies()) {
             TextureRegion currentFrame = (TextureRegion) enemyAnim.getKeyFrame(propellerAnimationTime, true);
             batch.draw(currentFrame,
