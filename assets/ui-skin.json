@@ -17,6 +17,12 @@
       "g": 0,
       "r": 0
     },
+    "white": {
+      "a": 1,
+      "b": 1,
+      "g": 1,
+      "r": 1
+    },
     "gray": {
       "a": 1,
       "b": 0.4,
@@ -35,7 +41,7 @@
       "down": "grey_button03",
       "up": "grey_button01",
       "font": "default-font",
-      "fontColor": "black",
+      "fontColor": "white",
       "downFontColor": "blueish-gray",
       "overFontColor": "gray"
     }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -21,7 +22,7 @@ public class UiRenderer extends ScreenAdapter {
 
     private AssetManager assetManager;
     private GameController controller;
-    private Stage stage;
+    protected Stage stage;
     private Skin skin;
     private Label scoreLabel;
 
@@ -60,6 +61,8 @@ public class UiRenderer extends ScreenAdapter {
         table.add(livesTable).pad(20);
 
         // table.debugAll();
+        stage.getRoot().getColor().a = 0;
+        stage.getRoot().addAction(Actions.fadeIn(2));
         stage.addActor(table);
     }
     @Override

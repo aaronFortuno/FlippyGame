@@ -70,4 +70,8 @@ public abstract class BaseScreen extends ScreenAdapter {
     public Stage getStage() {
         return stage;
     }
+
+    public Viewport getViewport() {
+        return viewport;
+    }
 }
