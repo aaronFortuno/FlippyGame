@@ -2,6 +2,9 @@
   "BitmapFont": {
     "default-font": {
       "file": "fonts/zyzol-regular.fnt",
+    },
+    "outline-font": {
+      "file": "fonts/zyzol-outline.fnt"
     }
   },
   "Color": {
@@ -41,6 +44,9 @@
     "high-score": {
       "font": "default-font",
       "fontColor": "blueish-gray"
+    },
+    "outline-font": {
+      "font": "outline-font"
     }
   },
   "CheckBoxStyle": {

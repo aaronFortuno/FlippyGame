@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import net.estemon.studio.FlippyGame;
 import net.estemon.studio.assets.AssetDescriptors;
 import net.estemon.studio.config.GameConfig;
+import net.estemon.studio.screens.menu.SplashScreen;
 import net.estemon.studio.utils.GdxUtils;
 
 public class LoadingScreen extends ScreenAdapter {

@@ -1,14 +1,10 @@
 package net.estemon.studio.screens.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import net.estemon.studio.FlippyGame;
-import net.estemon.studio.entity.Player;
-import net.estemon.studio.screens.BaseScreen;
+import net.estemon.studio.screens.common.BaseScreen;
 
 public class GameScreen extends BaseScreen {
 

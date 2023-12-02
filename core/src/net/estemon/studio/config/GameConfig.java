@@ -15,7 +15,7 @@ public class GameConfig {
     public static final float WORLD_CENTER_Y = WORLD_HEIGHT / 2; // world units
 
     // common plane values
-    public static final float PLANE_BOUNDS_RADIUS = 0.35f; // world units
+    public static final float PLANE_BOUNDS_RADIUS = 0.3f; // world units
 
 
     // player values
@@ -29,10 +29,10 @@ public class GameConfig {
     // enemies values
     public static final boolean IS_ENEMY_MOVING_Y = true;
     public static final float ENEMY_SIZE = 0.8f;
-    public static final float ENEMY_EASY_MAX_Y_SPEED = 0.05f;
+    public static final float ENEMY_EASY_MAX_Y_SPEED = 0.03f;
 
     public static final float ENEMY_EASY_X_SPEED = 0.05f;
-    public static final float ENEMY_ACCELERATION_Y = 0.05f;
+    public static final float ENEMY_ACCELERATION_Y = 0.04f;
     public static final float ENEMY_SPAWN_TIME = 1f;
     public static final int ENEMY_MAX_COUNT = 10;
 
