@@ -5,6 +5,9 @@
     },
     "outline-font": {
       "file": "fonts/zyzol-outline.fnt"
+    },
+    "title-font": {
+      "file": "fonts/zyzol-title.fnt"
     }
   },
   "Color": {
@@ -47,6 +50,9 @@
     },
     "outline-font": {
       "font": "outline-font"
+    },
+    "title-font": {
+      font: title-font
     }
   },
   "CheckBoxStyle": {

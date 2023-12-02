@@ -123,10 +123,10 @@ public class GameRenderer implements Disposable {
         renderGamePlay(delta);
 
         // Render debug graphics
-        renderDebug();
+        // renderDebug();
     }
 
-    private void updateBackground(float delta) {
+    public void updateBackground(float delta) {
         backgroundX -= delta * GameConfig.BACKGROUND_SPEED;
         backgroundX2 -= delta * GameConfig.BACKGROUND_SPEED;
 

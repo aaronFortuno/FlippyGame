@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import net.estemon.studio.assets.AssetDescriptors;
+import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.screens.game.Scrollable;
 
 public class Background extends Scrollable {

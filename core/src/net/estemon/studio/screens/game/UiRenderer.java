@@ -24,7 +24,7 @@ public class UiRenderer extends ScreenAdapter {
     private Stage stage;
     private Skin skin;
     private Label scoreLabel;
-    private Label livesLabel;
+
     private TextureRegion livesTexture;
     private Image[] livesImages;
 
@@ -45,7 +45,6 @@ public class UiRenderer extends ScreenAdapter {
         table.setFillParent(true);
 
         scoreLabel = new Label("SCORE: ", skin);
-        //Label levelLabel = new Label("LEVEL: ", skin);
 
         Table livesTable = new Table();
         int maxLives = GameConfig.PLAYER_START_LIVES;
