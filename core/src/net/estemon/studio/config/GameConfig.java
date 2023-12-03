@@ -2,6 +2,7 @@ package net.estemon.studio.config;
 
 public class GameConfig {
 
+    // World and environment
     public static final float GAME_WIDTH = 960; // pixels
     public static final float GAME_HEIGHT = 480; // pixels
 
@@ -14,12 +15,12 @@ public class GameConfig {
     public static final float WORLD_CENTER_X = WORLD_WIDTH / 2; // world units
     public static final float WORLD_CENTER_Y = WORLD_HEIGHT / 2; // world units
 
-    // common plane values
+    // Common plane values
     public static final float PLANE_BOUNDS_RADIUS = 0.3f; // world units
     public static final float PLANE_SIZE = 0.8f; // world units
 
 
-    // player values
+    // Player values
     public static final float PLAYER_SIZE = 0.8f; // world units
     public static final float PLAYER_WORLD_PADDING = 0.1f; // world units
     public static final float PLAYER_MIN_Y_POS = PLAYER_SIZE / 2 + PLAYER_WORLD_PADDING;
@@ -29,7 +30,7 @@ public class GameConfig {
     public static final float PLAYER_ACCELERATION_Y = 0.1f;
     public static final int PLAYER_START_LIVES = 3;
 
-    // enemies values
+    // Enemies values
     public static final boolean IS_ENEMY_MOVING_Y = true;
     public static final float ENEMY_SIZE = 0.8f;
 
@@ -54,18 +55,31 @@ public class GameConfig {
 
     public static final int ENEMY_MAX_COUNT = 10;
 
-    // plane rotation
+    // Plane rotation
     public static final float PLANE_ROTATION_SPEED = 100f;
     public static final int PLANE_NORMAL_ANGLE = 0;
     public static final int PLANE_MAX_ANGLE = 20;
     public static final int PLANE_MIN_ANGLE = -PLANE_MAX_ANGLE;
 
-    // sound effects values
+    // Bonus values
+    public static final int BONUS_MAX_COUNT = 5;
+    public static final float BONUS_SIZE = 0.6f;
+    public static final float BONUS_BOUNDS = BONUS_SIZE / 3;
+
+    public static final int GOLD_BONUS = 60;
+    public static final int SILVER_BONUS = 30;
+    public static final int BRONZE_BONUS = 15;
+
+    public static final int BONUS_EASY_MULTIPLIER = 1;
+    public static final int BONUS_MEDIUM_MULTIPLIER = 2;
+    public static final int BONUS_HARD_MULTIPLIER = 3;
+
+    // Scoring
+    public static final float SCORE_MAX_TIME = 1f;
+
+    // Sound effects values
     public static final float PROPELLER_PITCH_MIN = 0.6f;
     public static final float PROPELLER_PITCH_MAX = 1f;
 
     public static final int BACKGROUND_SPEED = 1;
-
-    // scoring
-    public static final float SCORE_MAX_TIME = 1f;
 }

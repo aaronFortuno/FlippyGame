@@ -16,38 +16,47 @@ import net.estemon.studio.common.GameManager;
 import net.estemon.studio.config.DifficultyLevel;
 import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Background;
+import net.estemon.studio.entity.Bonus;
+import net.estemon.studio.entity.BonusKind;
 import net.estemon.studio.entity.Enemy;
 import net.estemon.studio.entity.Player;
 
 public class GameController {
 
-    private Background background;
+    private final AssetManager assetManager;
 
+    private Background background;
+    private DifficultyLevel difficultyLevel;
+
+    // Player
     private Player player;
     private float rotationAngle = GameConfig.PLANE_NORMAL_ANGLE; // initial rotation angle
     private float ySpeed = 0;
     private float inputY1;
     private float inputY2;
+    private int lives = GameConfig.PLAYER_START_LIVES;
 
-
+    // Enemies
     private final Array<Enemy> enemies = new Array<>();
     private float enemyTimer;
     private Pool<Enemy> enemiesPool;
     private boolean isEnemyMovingY = GameConfig.IS_ENEMY_MOVING_Y;
 
 
+    // Bonus and scoring
+    private final Array<Bonus> bonuses = new Array<>();
+    private float bonusTimer;
+    private Pool<Bonus> bonusesPool;
     private float scoreTimer;
 
-    private int lives = GameConfig.PLAYER_START_LIVES;
     private int score;
     private int displayScore;
 
-
+    // Sounds
     private Sound hit;
     private Sound propellerSound;
     private long engine;
 
-    private final AssetManager assetManager;
 
     public GameController(FlippyGame game) {
         assetManager = game.getAssetManager();
@@ -57,6 +66,9 @@ public class GameController {
     private void init() {
         // Create player
         player = new Player();
+
+        // Get difficulty level
+        difficultyLevel = GameManager.INSTANCE.getDifficultyLevel();
 
         // Initial player position
         float startPlayerX = 1 - GameConfig.PLAYER_SIZE / 2;
@@ -78,6 +90,10 @@ public class GameController {
                 GameConfig.WORLD_HEIGHT
         );
 
+        // Init bonus pool
+        bonusesPool = Pools.get(Bonus.class, GameConfig.BONUS_MAX_COUNT);
+
+        // Set music and sounds
         Music music = assetManager.get(AssetDescriptors.GAME_MUSIC);
         music.setLooping(true);
         music.setVolume(1f);
@@ -95,7 +111,14 @@ public class GameController {
             return;
         }
         updatePlayer(delta);
-        updateEnemies(delta);
+        updateBonus(delta);
+
+        Bonus collidedBonus = isPlayerCollidingWithBonus();
+        if (collidedBonus != null) {
+            updateScore(collidedBonus.getValue());
+        }
+
+        // updateEnemies(delta);
         updateScore(delta);
         updateDisplayScore(delta);
         if (isPlayerCollidingWithEnemy()) {
@@ -110,6 +133,7 @@ public class GameController {
     public Background getBackground() { return background; }
     public Player getPlayer() { return player; }
     public Array<Enemy> getEnemies() { return enemies; }
+    public Array<Bonus> getBonuses() { return bonuses; }
     public float getRotationAngle() { return rotationAngle; }
     public int getLives() { return lives; }
     public int getDisplayScore() { return displayScore; }
@@ -134,6 +158,16 @@ public class GameController {
             }
         }
         return false;
+    }
+
+    private Bonus isPlayerCollidingWithBonus() {
+        for (Bonus bonus : bonuses) {
+            if (bonus.isNotHit() && bonus.isPlayerColliding(player)) {
+                System.out.println("BONUS!");
+                return bonus;
+            }
+        }
+        return null;
     }
 
     private void updatePlayer(float delta) {
@@ -273,6 +307,55 @@ public class GameController {
         }
     }
 
+    /*************** BONUS ****************/
+    private void updateBonus(float delta) {
+        for (Bonus bonus : bonuses) {
+            bonus.update(delta);
+        }
+        createNewBonus(delta);
+        removePassedBonuses();
+    }
+
+    private void createNewBonus(float delta) {
+        bonusTimer += delta;
+        if (bonusTimer >= difficultyLevel.getBonusSpawnTime()) {
+            System.out.println(difficultyLevel.getBonusSpawnTime());
+            float min = 0f + GameConfig.BONUS_SIZE / 2;
+            float max = GameConfig.WORLD_HEIGHT - GameConfig.BONUS_SIZE / 2;
+            float bonusX = GameConfig.WORLD_WIDTH;
+            float bonusY = MathUtils.random(min, max);;
+            Bonus bonus = bonusesPool.obtain();
+
+            int bonusType = MathUtils.random(0, 10);
+            if (bonusType <= 1) {
+                bonus.setKind(BonusKind.GOLD);
+            } else if (bonusType <= 4) {
+                bonus.setKind(BonusKind.SILVER);
+            } else {
+                bonus.setKind(BonusKind.BRONZE);
+            }
+            bonus.setXSpeed(difficultyLevel.getxSpeed());
+            System.out.println(bonus.getxSpeed());
+            bonus.setPosition(bonusX, bonusY);
+
+            bonuses.add(bonus);
+            bonusTimer = 0f;
+        }
+    }
+
+    private void removePassedBonuses() {
+        if (bonuses.size > 0 ) {
+            Bonus first = bonuses.first();
+
+            float minBonusX = -GameConfig.BONUS_SIZE;
+
+            if (first.getX() < minBonusX) {
+                bonuses.removeValue(first, true);
+                bonusesPool.free(first);
+            }
+        }
+    }
+
     /************** ENEMIES ***************/
     private void updateEnemies(float delta) {
         for (Enemy enemy : enemies) {
@@ -323,9 +406,8 @@ public class GameController {
     }
 
     private void createNewEnemy(float delta) {
-        DifficultyLevel difficultyLevel = GameManager.INSTANCE.getDifficultyLevel();
         enemyTimer += delta;
-        if (enemyTimer >= difficultyLevel.getSpawnTime()) {
+        if (enemyTimer >= difficultyLevel.getEnemySpawnTime()) {
             float min = 0f + GameConfig.ENEMY_SIZE / 2;
             float max = GameConfig.WORLD_HEIGHT - GameConfig.ENEMY_SIZE / 2;
             float enemyX = GameConfig.WORLD_WIDTH;
@@ -361,6 +443,12 @@ public class GameController {
             score += MathUtils.random(1, 5);
             scoreTimer = 0f;
         }
+    }
+
+    private void updateScore(int bonusPoints) {
+        int totalPoints = bonusPoints * difficultyLevel.getBonusMultiplier();
+        System.out.println("POINTS: " + totalPoints);
+        score += totalPoints;
     }
 
     private void updateDisplayScore(float delta) {

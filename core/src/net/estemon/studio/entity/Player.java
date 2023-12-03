@@ -2,7 +2,7 @@ package net.estemon.studio.entity;
 
 import net.estemon.studio.config.GameConfig;
 
-public class Player extends PlaneBase {
+public class Player extends GameObjectBase {
 
     public Player() {
         super(GameConfig.PLANE_BOUNDS_RADIUS);

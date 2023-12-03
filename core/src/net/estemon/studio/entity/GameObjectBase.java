@@ -3,11 +3,10 @@ package net.estemon.studio.entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Vector2;
 
 import net.estemon.studio.config.GameConfig;
 
-public abstract class PlaneBase {
+public abstract class GameObjectBase {
 
     private float x;
     private float y;
@@ -17,7 +16,7 @@ public abstract class PlaneBase {
 
     private final Circle bounds;
 
-    public PlaneBase(float boundsRadius) {
+    public GameObjectBase(float boundsRadius) {
         bounds = new Circle(x, y, boundsRadius);
     }
 

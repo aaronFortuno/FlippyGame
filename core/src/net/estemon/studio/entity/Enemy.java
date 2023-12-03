@@ -1,6 +1,5 @@
 package net.estemon.studio.entity;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
@@ -10,7 +9,7 @@ import net.estemon.studio.common.GameManager;
 import net.estemon.studio.config.DifficultyLevel;
 import net.estemon.studio.config.GameConfig;
 
-public class Enemy extends PlaneBase implements Pool.Poolable {
+public class Enemy extends GameObjectBase implements Pool.Poolable {
 
     private DifficultyLevel difficultyLevel;
 
@@ -65,7 +64,7 @@ public class Enemy extends PlaneBase implements Pool.Poolable {
     }
 
     public void drawDebug(ShapeRenderer renderer) {
-        super.drawDebug(renderer, -180);
+        super.drawDebug(renderer, -180f);
         renderer.x(getBounds().x, getBounds().y, 0.1f);
     }
 

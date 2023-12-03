@@ -21,6 +21,7 @@ import net.estemon.studio.assets.AssetDescriptors;
 import net.estemon.studio.assets.RegionNames;
 import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Background;
+import net.estemon.studio.entity.Bonus;
 import net.estemon.studio.entity.Enemy;
 import net.estemon.studio.entity.Player;
 import net.estemon.studio.utils.GdxUtils;
@@ -172,8 +173,6 @@ public class GameRenderer implements Disposable {
         }
 
         batch.end();
-
-
     }
 
     private void drawBackground() {
@@ -258,9 +257,18 @@ public class GameRenderer implements Disposable {
 
     private void drawDebug() {
         float rotationAngle = controller.getRotationAngle();
+
+        // Render player debug
         controller.getPlayer().drawDebug(renderer, rotationAngle);
+
+        // Render enemies debug
         for (Enemy enemy : controller.getEnemies()) {
             enemy.drawDebug(renderer);
+        }
+
+        // Render bonuses debug
+        for (Bonus bonus : controller.getBonuses()) {
+            bonus.drawDebug(renderer);
         }
     }
 }
