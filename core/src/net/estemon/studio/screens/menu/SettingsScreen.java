@@ -26,7 +26,7 @@ public class SettingsScreen extends BaseScreen {
 
     private AssetManager assetManager;
 
-    private ButtonGroup<CheckBox> checkBoxGroup;
+    private ButtonGroup<CheckBox> diffCheckBoxGroup;
     private CheckBox easy;
     private CheckBox medium;
     private CheckBox hard;
@@ -59,13 +59,14 @@ public class SettingsScreen extends BaseScreen {
 
         Label label = new Label("DIFFICULTY", skin);
 
+        // Difficulty checkboxes
         easy = checkBox(DifficultyLevel.EASY.name(), skin);
         medium = checkBox(DifficultyLevel.MEDIUM.name(), skin);
         hard = checkBox(DifficultyLevel.HARD.name(), skin);
 
-        checkBoxGroup = new ButtonGroup<>(easy, medium, hard);
+        diffCheckBoxGroup = new ButtonGroup<>(easy, medium, hard);
         final DifficultyLevel difficultyLevel = GameManager.INSTANCE.getDifficultyLevel();
-        checkBoxGroup.setChecked(difficultyLevel.name());
+        diffCheckBoxGroup.setChecked(difficultyLevel.name());
         ChangeListener listener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -77,6 +78,19 @@ public class SettingsScreen extends BaseScreen {
         medium.addListener(listener);
         hard.addListener(listener);
 
+        // Show buttons checkbox
+        final CheckBox showButtons = checkBox("UI buttons", skin);
+        showButtons.setChecked(GameManager.INSTANCE.getShowButtons());
+        System.out.println("[showUiButtons?] " + GameManager.INSTANCE.getShowButtons());
+
+        showButtons.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                GameManager.INSTANCE.updateShowButtons(showButtons.isChecked());
+                System.out.println("[changeShowUiButtons] " + GameManager.INSTANCE.getShowButtons());
+            }
+        });
+
         // Back button
         TextButton backButton = new TextButton("BACK", skin);
         backButton.addListener(new ChangeListener() {
@@ -87,10 +101,13 @@ public class SettingsScreen extends BaseScreen {
         });
 
         // Add content to content table
-        contentTable.add(titleLabel).padBottom(30f).row();
-        contentTable.add(easy).row();
-        contentTable.add(medium).row();
+        contentTable.add(titleLabel).padBottom(30f).colspan(3).row();
+        contentTable.add(easy);
+        contentTable.add(medium);
         contentTable.add(hard).row();
+        contentTable.add();
+        contentTable.add(showButtons).row();
+        contentTable.add();
         contentTable.add(backButton);
 
         // Add content table to screen
@@ -103,7 +120,7 @@ public class SettingsScreen extends BaseScreen {
     }
 
     private void difficultyChanged() {
-        CheckBox checked = checkBoxGroup.getChecked();
+        CheckBox checked = diffCheckBoxGroup.getChecked();
 
         if (checked == easy) {
             GameManager.INSTANCE.updateDifficulty(DifficultyLevel.EASY);

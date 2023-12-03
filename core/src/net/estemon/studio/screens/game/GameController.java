@@ -48,6 +48,8 @@ public class GameController {
     private float bonusTimer;
     private Pool<Bonus> bonusesPool;
     private float scoreTimer;
+
+    private long bonusPitch;
     private Sound bonusSound;
 
     private int score;
@@ -58,6 +60,10 @@ public class GameController {
     private Sound propellerSound;
     private long engine;
     private Sound crashSound;
+
+    private boolean shouldGoUp;
+    private boolean shouldGoDown;
+    private boolean shouldGoStraight;
 
 
     public GameController(FlippyGame game) {
@@ -95,12 +101,7 @@ public class GameController {
         // Init bonus pool
         bonusesPool = Pools.get(Bonus.class, GameConfig.BONUS_MAX_COUNT);
 
-        // Set music and sounds
-        Music music = assetManager.get(AssetDescriptors.GAME_MUSIC);
-        music.setLooping(true);
-        music.setVolume(1f);
-        music.play(); // uncomment to play music
-
+        // Set sounds
         propellerSound = assetManager.get(AssetDescriptors.SOUND_PROPELLER);
         engine = propellerSound.loop();
         propellerSound.setVolume(engine, 0.45f);
@@ -143,17 +144,53 @@ public class GameController {
     public int getLives() { return lives; }
     public int getDisplayScore() { return displayScore; }
 
-    public void stopPropellerSound() {
-        propellerSound.stop();
+    public boolean isShouldGoUp() {
+        return shouldGoUp;
+    }
+
+
+
+    public boolean isShouldGoDown() {
+        return shouldGoDown;
+    }
+    public boolean isShouldGoStraight() {
+        return shouldGoStraight;
+    }
+
+    public void setShouldGoUp(boolean shouldGoUp) {
+        this.shouldGoUp = shouldGoUp;
+        if (shouldGoUp) {
+            setShouldGoDown(false);
+            setShouldGoStraight(false);
+        }
+    }
+
+    public void setShouldGoDown(boolean shouldGoDown) {
+        this.shouldGoDown = shouldGoDown;
+        if (shouldGoDown) {
+            setShouldGoUp(false);
+            setShouldGoStraight(false);
+        }
+    }
+
+    public void setShouldGoStraight(boolean shouldGoStraight) {
+        this.shouldGoStraight = shouldGoStraight;
+        if (shouldGoStraight) {
+            setShouldGoUp(false);
+            setShouldGoDown(false);
+        }
     }
 
     public boolean isGameOver() {
         return lives <= 0;
     }
 
+    public void stopPropellerSound() {
+        propellerSound.stop();
+    }
+
 
     // Private methods
-
     /************** PLAYER ***************/
     private boolean isPlayerCollidingWithEnemy() {
         for (Enemy enemy : enemies) {
@@ -171,7 +208,17 @@ public class GameController {
             if (bonus.isNotHit() && bonus.isPlayerColliding(player)) {
                 System.out.println("[BONUS]");
                 bonus.setCollided(true);
-                bonusSound.play(0.7f);
+
+                bonusPitch = bonusSound.play(0.7f);
+
+                // Set pitch of bonus sound related to bonus kind
+                if (bonus.getKind() == BonusKind.GOLD) {
+                    bonusSound.setPitch(bonusPitch, 2f);
+                } else if (bonus.getKind() == BonusKind.SILVER) {
+                    bonusSound.setPitch(bonusPitch, 1.5f);
+                } else {
+                    bonusSound.setPitch(bonusPitch, 1f);
+                }
                 return bonus;
             }
         }
@@ -185,7 +232,53 @@ public class GameController {
         inputY1 = screenHeight - Gdx.input.getY(); // Inverse Y axis system
         boolean isTouched = Gdx.input.isTouched();
 
-        if (isTouched) {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) || isShouldGoUp()) {
+            if (checkIfCanGoUp()) {
+                goUp(delta);
+            } else {
+                goStraight(delta);
+            }
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || isShouldGoDown()) {
+            if (checkIfCanGoDown()) {
+                goDown(delta);
+            } else {
+                goStraight(delta);
+            }
+        } else if (isTouched) {
+            // Check if is first touching
+            if (inputY2 == -1) {
+                inputY2 = inputY1;
+            }
+
+            // Relative change at Y
+            float deltaY = inputY1 - inputY2;
+
+            // Check if there's significative change
+            if (Math.abs(deltaY) > 2) {
+                if (deltaY > 0) {
+                    if (checkIfCanGoUp()) {
+                        goUp(delta);
+                    } else {
+                        goStraight(delta);
+                    }
+                } else {
+                    if (checkIfCanGoDown()) {
+                        goDown(delta);
+                    } else {
+                        goStraight(delta);
+                    }
+                }
+            }
+
+            // Update inputY2 at end of touching
+            inputY2 = inputY1;
+        } else {
+            // Reset inputY2 if there's no touch
+            inputY2 = -1;
+            goStraight(delta);
+        }
+
+/*        if (isTouched) {
 
             // Check if is first touching
             if (inputY2 == -1) {
@@ -218,15 +311,16 @@ public class GameController {
 
             // Reset inputY2 if there's no touch
             inputY2 = -1;
+        }*/
 
-            // Handle keystrokes only if there's no touching screen or dragging player
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            /*// Handle keystrokes only if there's no touching screen or dragging player
+            if (Gdx.input.isKeyPressed(Input.Keys.UP) || isShouldGoUp()) {
                 if (checkIfCanGoUp()) {
                     goUp(delta);
                 } else {
                     goStraight(delta);
                 }
-            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || isShouldGoDown()) {
                 if (checkIfCanGoDown()) {
                     goDown(delta);
                 } else {
@@ -234,8 +328,9 @@ public class GameController {
                 }
             } else {
                 goStraight(delta);
-            }
-        }
+            }*/
+
+
 
         player.setY(player.getY() + ySpeed);
         blockPlayerFromLeavingTheWorld();

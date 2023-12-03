@@ -11,11 +11,13 @@ public class GameManager {
     public static final GameManager INSTANCE = new GameManager();
     public static final String HIGH_SCORE_KEY = "highscore";
     public static final String DIFFICULTY_KEY = "difficulty";
+    public static final String SHOW_BUTTONS_KEY = "showButtons";
 
     private final Preferences PREFS;
 
     private int highScore;
     private DifficultyLevel difficultyLevel;
+    private boolean showButtons;
 
     // SINGLETON, not instantiable
     private GameManager() {
@@ -24,6 +26,8 @@ public class GameManager {
 
         String difficultyName = PREFS.getString(DIFFICULTY_KEY, DifficultyLevel.EASY.name());
         difficultyLevel = DifficultyLevel.valueOf(difficultyName);
+
+        showButtons = PREFS.getBoolean(SHOW_BUTTONS_KEY, false);
     }
 
     /********* HIGH SCORE *********/
@@ -58,4 +62,12 @@ public class GameManager {
     public DifficultyLevel getDifficultyLevel() {
         return difficultyLevel;
     }
+
+    /********* SHOW BUTTONS *********/
+    public void updateShowButtons(boolean showButtons) {
+        PREFS.putBoolean(SHOW_BUTTONS_KEY, showButtons);
+        PREFS.flush();
+    }
+
+    public boolean getShowButtons() { return PREFS.getBoolean(SHOW_BUTTONS_KEY); }
 }

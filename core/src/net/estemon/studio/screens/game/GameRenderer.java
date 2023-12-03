@@ -134,7 +134,7 @@ public class GameRenderer implements Disposable {
         renderGamePlay(delta);
 
         // Render debug graphics
-        renderDebug();
+        // renderDebug();
     }
 
     public void updateBackground(float delta) {

@@ -25,6 +25,8 @@ public class GameScreen extends BaseScreen {
         controller = new GameController(game);
         renderer = new GameRenderer(game.getBatch(), assetManager, controller);
         uiRenderer = new UiRenderer(assetManager, renderer.getUiViewport(), controller);
+
+
     }
 
     @Override

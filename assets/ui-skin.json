@@ -38,12 +38,13 @@
   },
   "TextButtonStyle": {
     "default": {
-      "down": "grey_button03",
-      "up": "grey_button01",
+      "down": "grey_button15",
+      "up": "grey_button03",
+      "over": "grey_button01",
       "font": "default-font",
       "fontColor": "white",
-      "downFontColor": "blueish-gray",
-      "overFontColor": "gray"
+      "downFontColor": "white",
+      "overFontColor": "white"
     }
   },
   "LabelStyle": {
@@ -65,7 +66,7 @@
     "default": {
       "down": "grey_button03",
       "up": "grey_button01",
-      "checkboxOn": "grey_boxCheckmark",
+      "checkboxOn": "blue_boxCheckmark",
       "checkboxOff": "grey_box",
       "font": "default-font",
       "fontColor": "gray"
