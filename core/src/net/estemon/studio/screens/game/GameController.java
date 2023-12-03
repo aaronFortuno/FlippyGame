@@ -48,6 +48,7 @@ public class GameController {
     private float bonusTimer;
     private Pool<Bonus> bonusesPool;
     private float scoreTimer;
+    private Sound bonusSound;
 
     private int score;
     private int displayScore;
@@ -56,6 +57,7 @@ public class GameController {
     private Sound hit;
     private Sound propellerSound;
     private long engine;
+    private Sound crashSound;
 
 
     public GameController(FlippyGame game) {
@@ -103,6 +105,9 @@ public class GameController {
         engine = propellerSound.loop();
         propellerSound.setVolume(engine, 0.45f);
         propellerSound.setPitch(engine, 1f);
+
+        bonusSound = assetManager.get(AssetDescriptors.SOUND_BONUS);
+        crashSound = assetManager.get(AssetDescriptors.SOUND_CRASH);
     }
 
     public void update(float delta) {
@@ -153,7 +158,8 @@ public class GameController {
     private boolean isPlayerCollidingWithEnemy() {
         for (Enemy enemy : enemies) {
             if (enemy.isNotHit() && enemy.isPlayerColliding(player)) {
-                System.out.println("HIT!");
+                System.out.println("[HIT]");
+                crashSound.play(0.7f);
                 return true;
             }
         }
@@ -163,7 +169,9 @@ public class GameController {
     private Bonus isPlayerCollidingWithBonus() {
         for (Bonus bonus : bonuses) {
             if (bonus.isNotHit() && bonus.isPlayerColliding(player)) {
-                System.out.println("BONUS!");
+                System.out.println("[BONUS]");
+                bonus.setCollided(true);
+                bonusSound.play(0.7f);
                 return bonus;
             }
         }
@@ -319,7 +327,7 @@ public class GameController {
     private void createNewBonus(float delta) {
         bonusTimer += delta;
         if (bonusTimer >= difficultyLevel.getBonusSpawnTime()) {
-            System.out.println(difficultyLevel.getBonusSpawnTime());
+            System.out.println("[bonus spawnTime] " + difficultyLevel.getBonusSpawnTime());
             float min = 0f + GameConfig.BONUS_SIZE / 2;
             float max = GameConfig.WORLD_HEIGHT - GameConfig.BONUS_SIZE / 2;
             float bonusX = GameConfig.WORLD_WIDTH;
@@ -335,7 +343,7 @@ public class GameController {
                 bonus.setKind(BonusKind.BRONZE);
             }
             bonus.setXSpeed(difficultyLevel.getxSpeed());
-            System.out.println(bonus.getxSpeed());
+            System.out.println("[bonus xSpeed] " + bonus.getxSpeed());
             bonus.setPosition(bonusX, bonusY);
 
             bonuses.add(bonus);
@@ -447,7 +455,7 @@ public class GameController {
 
     private void updateScore(int bonusPoints) {
         int totalPoints = bonusPoints * difficultyLevel.getBonusMultiplier();
-        System.out.println("POINTS: " + totalPoints);
+        System.out.println("[bonus points] " + totalPoints);
         score += totalPoints;
     }
 

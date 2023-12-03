@@ -23,4 +23,8 @@ public class AssetDescriptors {
             new AssetDescriptor<>(AssetPaths.GAME_MUSIC, Music.class);
     public static final AssetDescriptor<Sound> SOUND_PROPELLER =
             new AssetDescriptor<>(AssetPaths.SOUND_PROPELLER, Sound.class);
+    public static final AssetDescriptor<Sound> SOUND_BONUS =
+            new AssetDescriptor<>(AssetPaths.SOUND_BONUS, Sound.class);
+    public static final AssetDescriptor<Sound> SOUND_CRASH =
+            new AssetDescriptor<>(AssetPaths.SOUND_CRASH, Sound.class);
 }

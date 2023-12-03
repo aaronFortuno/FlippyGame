@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Disposable;
@@ -235,10 +236,35 @@ public class GameRenderer implements Disposable {
 
     private void drawBonus(float delta) {
         for (Bonus bonus : controller.getBonuses()) {
-            bonusAnimationTime += delta;
-            TextureRegion currentFrame = (TextureRegion) bonusAnim.getKeyFrame(bonusAnimationTime, true);
+            float timer = bonus.getTimer();
+            bonus.setTimer(timer + delta);
+            TextureRegion currentFrame = (TextureRegion) bonusAnim.getKeyFrame(timer, true);
 
-            // Set color depending on bonus kind
+            // Interpolated scale animation when player collides with bonus
+            if (bonus.isCollided()) {
+                float totalAnimationTime = 0.25f;
+                float increaseTime = 0.15f;
+                float decreaseTime = 0.1f;
+                float maxScale = 2f;
+
+                bonus.setAnimationTimer(bonus.getAnimationTimer() + delta);
+
+                if (bonus.getAnimationTimer() <= increaseTime) {
+                    float progress = bonus.getAnimationTimer() / increaseTime;
+                    float interpolatedScale = Interpolation.bounceOut.apply(1f, maxScale, progress);
+                    bonus.setScaleFactor(interpolatedScale);
+                } else if (bonus.getAnimationTimer() <= totalAnimationTime) {
+                    float progress = (bonus.getAnimationTimer() - increaseTime) / decreaseTime;
+                    float interpolatedScale = Interpolation.linear.apply(maxScale, 0f, progress);
+                    bonus.setScaleFactor(interpolatedScale);
+                } else {
+                    bonus.setCollided(false);
+                    bonus.setScaleFactor(0f);
+                    bonus.setAnimationTimer(0f);
+                }
+            }
+
+            // Set coin color depending on bonus kind
             Color tint = getColorForBonusType(bonus.getKind());
             batch.setColor(tint);
             batch.draw(
@@ -246,7 +272,9 @@ public class GameRenderer implements Disposable {
                     bonus.getX(), bonus.getY(),
                     bonus.getWidth() / 2, bonus.getHeight() / 2,
                     bonus.getWidth(), bonus.getHeight(),
-                    GameConfig.BONUS_SIZE, GameConfig.BONUS_SIZE, 0
+                    GameConfig.BONUS_SIZE * bonus.getScaleFactor(),
+                    GameConfig.BONUS_SIZE * bonus.getScaleFactor(),
+                    0
             );
 
             // Reset batch color to original

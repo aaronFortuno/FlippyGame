@@ -11,6 +11,9 @@ public class AssetPaths {
 
     // Sprites and UI by Kenney from https://www.kenney.nl/
     // CC0 1.0 DEED https://creativecommons.org/publicdomain/zero/1.0/
+
+    // Coin sprites by Kexatchison from https://opengameart.org/content/2d-coin
+    // CC0 1.0 DEED https://creativecommons.org/publicdomain/zero/1.0/
     public static final String GAMEPLAY_ATLAS = "gameplay.atlas";
     public static final String UI_SKIN = "ui-skin.json";
 
@@ -20,7 +23,15 @@ public class AssetPaths {
     public static final String GAME_MUSIC = "sounds/game_music.mp3";
 
 
-    // Sound by TheRandomSoundByte2637 from https://freesound.org/people/TheRandomSoundByte2637/sounds/607776/
+    // Propeller sound by TheRandomSoundByte2637 from https://freesound.org/people/TheRandomSoundByte2637/sounds/607776/
     // CC0 1.0 DEED https://creativecommons.org/publicdomain/zero/1.0/
     public static final String SOUND_PROPELLER = "sounds/propeller.mp3";
+
+    // Bonus sound by Kenney from https://www.kenney.nl/assets/music-jingles
+    // CC0 1.0 DEED https://creativecommons.org/publicdomain/zero/1.0/
+    public static final String SOUND_BONUS = "sounds/bonus.ogg";
+
+    // Crash sound by Spring Spring from https://opengameart.org/content/mechanical-explosion
+    // CC0 1.0 DEED https://creativecommons.org/publicdomain/zero/1.0/
+    public static final String SOUND_CRASH = "sounds/crash.wav";
 }

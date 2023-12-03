@@ -1,6 +1,7 @@
 package net.estemon.studio.screens;
 
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -50,6 +51,8 @@ public class LoadingScreen extends ScreenAdapter {
         assetManager.load(AssetDescriptors.UI_SKIN);
         assetManager.load(AssetDescriptors.GAME_MUSIC);
         assetManager.load(AssetDescriptors.SOUND_PROPELLER);
+        assetManager.load(AssetDescriptors.SOUND_BONUS);
+        assetManager.load(AssetDescriptors.SOUND_CRASH);
         assetManager.finishLoading();
     }
 

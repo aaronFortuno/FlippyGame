@@ -19,6 +19,9 @@ public class Bonus extends GameObjectBase implements Pool.Poolable {
     private float timer = 0f;
     private int value;
     private BonusKind kind;
+    private boolean collided;
+    private float scaleFactor = 1f;
+    private float animationTimer = 0f;
 
     public Bonus() {
         super(GameConfig.BONUS_BOUNDS);
@@ -42,7 +45,7 @@ public class Bonus extends GameObjectBase implements Pool.Poolable {
     public void update (float delta) {
         // Bonuses travel faster than enemies
         setX(getX() - getxSpeed() * 1.2f);
-        timer += delta;
+        // timer += delta;
     }
 
     public void setXSpeed(float xSpeed) {
@@ -92,5 +95,40 @@ public class Bonus extends GameObjectBase implements Pool.Poolable {
         // Reset bonus to reuse at pooling
         hit = false;
         timer = 0f;
+        collided = false;
+        scaleFactor = 1f;
+        animationTimer = 0f;
+    }
+
+    public float getTimer() {
+        return timer;
+    }
+
+    public void setTimer(float timer) {
+        this.timer = timer;
+    }
+
+    public void setScaleFactor(float scaleFactor) {
+        this.scaleFactor = scaleFactor;
+    }
+
+    public float getScaleFactor() {
+        return scaleFactor;
+    }
+
+    public boolean isCollided() {
+        return collided;
+    }
+
+    public void setCollided(boolean collided) {
+        this.collided = collided;
+    }
+
+    public float getAnimationTimer() {
+        return animationTimer;
+    }
+
+    public void setAnimationTimer(float animationTimer) {
+        this.animationTimer = animationTimer;
     }
 }
