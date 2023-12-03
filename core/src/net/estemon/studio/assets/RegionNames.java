@@ -5,4 +5,6 @@ public class RegionNames {
 
     public static final String BACKGROUND = "background";
     public static final String PLAYER = "planeGreen1";
+
+    public static final String COIN_BONUS = "coin";
 }

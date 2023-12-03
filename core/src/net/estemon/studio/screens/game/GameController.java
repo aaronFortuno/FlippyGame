@@ -118,7 +118,7 @@ public class GameController {
             updateScore(collidedBonus.getValue());
         }
 
-        // updateEnemies(delta);
+        updateEnemies(delta);
         updateScore(delta);
         updateDisplayScore(delta);
         if (isPlayerCollidingWithEnemy()) {

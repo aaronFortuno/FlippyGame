@@ -63,7 +63,7 @@ public class GameConfig {
 
     // Bonus values
     public static final int BONUS_MAX_COUNT = 5;
-    public static final float BONUS_SIZE = 0.6f;
+    public static final float BONUS_SIZE = 0.8f;
     public static final float BONUS_BOUNDS = BONUS_SIZE / 3;
 
     public static final int GOLD_BONUS = 60;

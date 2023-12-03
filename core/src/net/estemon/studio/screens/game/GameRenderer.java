@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -22,6 +23,7 @@ import net.estemon.studio.assets.RegionNames;
 import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Background;
 import net.estemon.studio.entity.Bonus;
+import net.estemon.studio.entity.BonusKind;
 import net.estemon.studio.entity.Enemy;
 import net.estemon.studio.entity.Player;
 import net.estemon.studio.utils.GdxUtils;
@@ -41,6 +43,7 @@ public class GameRenderer implements Disposable {
     private final AssetManager assetManager;
     private final SpriteBatch batch;
 
+    // Background
     private TextureRegion backgroundRegion;
     private float backgroundX;
     private float backgroundX2;
@@ -48,16 +51,22 @@ public class GameRenderer implements Disposable {
 
     private int previousY = 0;
 
+    // Particles
     private ParticleEffect particleEffect1;
     private ParticleEffect particleEffect2;
 
+    // Player
     public static TextureRegion[] player;
     public static Animation playerAnim;
 
-
+    // Enemies
     public static TextureRegion[] enemy;
     public static Animation enemyAnim;
     public static float propellerAnimationTime = 0f;
+
+    public static TextureRegion[] bonus;
+    public static Animation bonusAnim;
+    public static float bonusAnimationTime = 0f;
 
     // Getter for UiRenderer
     public Viewport getUiViewport() { return uiViewport; }
@@ -91,6 +100,7 @@ public class GameRenderer implements Disposable {
         
         Animations.playerPlaneAnimation(assetManager);
         Animations.enemyPlaneAnimation(assetManager);
+        Animations.bonusAnimation(assetManager);
 
         particleEffect1 = new ParticleEffect();
         particleEffect1.load(Gdx.files.internal("particles/particle1.p"), gameplayAtlas);
@@ -110,12 +120,10 @@ public class GameRenderer implements Disposable {
         debugCameraController.handleDebugInput(delta);
         debugCameraController.applyTo(camera);
 
-        if (Gdx.input.isTouched() && !controller.isGameOver()) {
+/*        if (Gdx.input.isTouched() && !controller.isGameOver()) {
             Vector2 screenTouch = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             Vector2 worldTouch = viewport.unproject(new Vector2(screenTouch));
-
-
-        }
+        }*/
 
         GdxUtils.clearScreen();
 
@@ -160,8 +168,9 @@ public class GameRenderer implements Disposable {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
-        // drawBackground(); // uncomment to draw bg textures
+        drawBackground(); // uncomment to draw bg textures
         drawPlayer(delta); // uncomment to draw player textures
+        drawBonus(delta);
         drawEnemies(); // uncomment to draw enemy planes textures
 
         int lives = controller.getLives();
@@ -224,6 +233,39 @@ public class GameRenderer implements Disposable {
         }
     }
 
+    private void drawBonus(float delta) {
+        for (Bonus bonus : controller.getBonuses()) {
+            bonusAnimationTime += delta;
+            TextureRegion currentFrame = (TextureRegion) bonusAnim.getKeyFrame(bonusAnimationTime, true);
+
+            // Set color depending on bonus kind
+            Color tint = getColorForBonusType(bonus.getKind());
+            batch.setColor(tint);
+            batch.draw(
+                    currentFrame,
+                    bonus.getX(), bonus.getY(),
+                    bonus.getWidth() / 2, bonus.getHeight() / 2,
+                    bonus.getWidth(), bonus.getHeight(),
+                    GameConfig.BONUS_SIZE, GameConfig.BONUS_SIZE, 0
+            );
+
+            // Reset batch color to original
+            batch.setColor(Color.WHITE);
+        }
+    }
+
+    private Color getColorForBonusType(BonusKind kind) {
+        switch (kind) {
+            case GOLD:
+                return Color.GOLD;
+            case SILVER:
+                return Color.LIGHT_GRAY;
+            case BRONZE:
+                return Color.SALMON;
+            default:
+                return Color.WHITE;
+        }
+    }
 
     private void drawEnemies() {
         for (Enemy enemy : controller.getEnemies()) {

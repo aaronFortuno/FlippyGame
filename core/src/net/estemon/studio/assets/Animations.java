@@ -1,11 +1,14 @@
 package net.estemon.studio.assets;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import net.estemon.studio.screens.game.GameRenderer;
+
+import jdk.tools.jlink.internal.plugins.StripNativeCommandsPlugin;
 
 public class Animations {
 
@@ -34,6 +37,18 @@ public class Animations {
         }
 
         GameRenderer.enemyAnim = new Animation<>(0.03f, GameRenderer.enemy);
-        GameRenderer.playerAnim.setPlayMode(Animation.PlayMode.LOOP);
+        GameRenderer.enemyAnim.setPlayMode(Animation.PlayMode.LOOP);
+    }
+
+    public static void bonusAnimation(AssetManager assetManager) {
+        gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS);
+        GameRenderer.bonus = new TextureRegion[8];
+
+        for (int i = 0; i < GameRenderer.bonus.length; i++) {
+            String regionName = "coin" + (i + 1);
+            GameRenderer.bonus[i] = gameplayAtlas.findRegion(regionName);
+        }
+        GameRenderer.bonusAnim = new Animation<>(0.03f, GameRenderer.bonus);
+        GameRenderer.bonusAnim.setPlayMode(Animation.PlayMode.LOOP);
     }
 }

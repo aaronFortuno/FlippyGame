@@ -31,6 +31,10 @@ public class Bonus extends GameObjectBase implements Pool.Poolable {
         this.value = kind.getValue(); // Get bonus value
     }
 
+    public BonusKind getKind() {
+        return kind;
+    }
+
     public int getValue() {
         return value;
     }
