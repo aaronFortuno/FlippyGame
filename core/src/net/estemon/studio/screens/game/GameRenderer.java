@@ -144,7 +144,7 @@ public class GameRenderer implements Disposable {
         renderGamePlay(delta);
 
         // Render debug graphics
-        renderDebug();
+        // renderDebug();
     }
 
     public void updateBackground(float delta) {
@@ -179,7 +179,7 @@ public class GameRenderer implements Disposable {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
-        // drawBackground();
+        drawBackground();
         drawBullets(delta);
         drawPlayer(delta);
         drawBonus(delta);
