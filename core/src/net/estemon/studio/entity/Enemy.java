@@ -20,6 +20,7 @@ public class Enemy extends GameObjectBase implements Pool.Poolable {
     private boolean goUp;
     private boolean goDown;
     private boolean destroyed;
+    private float angle;
 
 
     public float getTimer() {
@@ -28,6 +29,14 @@ public class Enemy extends GameObjectBase implements Pool.Poolable {
 
     public void setTimer(float timer) {
         this.timer = timer;
+    }
+
+    public float getAngle() {
+        return angle;
+    }
+
+    public void setAngle(float angle) {
+        this.angle = angle;
     }
 
     public boolean isGoUp() {
@@ -56,6 +65,10 @@ public class Enemy extends GameObjectBase implements Pool.Poolable {
 
     public void update(float delta) {
         setX(getX() - difficultyLevel.getxSpeed());
+        if (destroyed) {
+            angle += GameConfig.PLANE_DESTROYED_ROTATION_SPEED * delta;
+            ySpeed += GameConfig.GRAVITY * delta;
+        }
         setY(getY() + ySpeed);
         timer += delta;
     }
@@ -77,12 +90,18 @@ public class Enemy extends GameObjectBase implements Pool.Poolable {
         return overlaps;
     }
 
-    public boolean isNotHit() {
-        return !hit;
+    public boolean isBulletColliding(Bullet bullet) {
+        Circle bulletBounds = bullet.getBounds();
+        if (!destroyed) {
+            boolean overlaps = Intersector.overlaps(bulletBounds, getBounds());
+            destroyed = overlaps;
+            hit = overlaps;
+        }
+        return destroyed;
     }
 
-    public void setDestroyed(boolean destroyed) {
-        this.destroyed = destroyed;
+    public boolean isNotHit() {
+        return !hit;
     }
 
     @Override
@@ -94,35 +113,42 @@ public class Enemy extends GameObjectBase implements Pool.Poolable {
         goDown = false;
         ySpeed = 0;
         destroyed = false;
+        angle = 0;
     }
 
     public void goUp(float delta) {
-        ySpeed += delta * difficultyLevel.getyAcceleration();
-
+        if (!destroyed) {
+            ySpeed += delta * difficultyLevel.getyAcceleration();
+        }
     }
 
     public void goDown(float delta) {
-        ySpeed -= delta * difficultyLevel.getyAcceleration();
+        if (!destroyed) {
+            ySpeed -= delta * difficultyLevel.getyAcceleration();
+        }
     }
 
     public void goStraight(float delta) {
-        // Normalising y speed
-        DifficultyLevel difficultyLevel = GameManager.INSTANCE.getDifficultyLevel();
-        float maxYSpeed = difficultyLevel.getMaxYSpeed();
-        if (ySpeed > 0) {
-            if (ySpeed > maxYSpeed) {
-                ySpeed = maxYSpeed;
-            } else {
-                ySpeed -= delta * difficultyLevel.getyAcceleration();
-                ySpeed = Math.max(ySpeed, 0);
-            }
-        } else if (ySpeed < 0) {
-            if (ySpeed < -maxYSpeed) {
-                ySpeed = -maxYSpeed;
-            } else {
-                ySpeed += delta * difficultyLevel.getyAcceleration();
-                ySpeed = Math.min(ySpeed, 0);
+        if (!destroyed) {
+            // Normalising y speed
+            DifficultyLevel difficultyLevel = GameManager.INSTANCE.getDifficultyLevel();
+            float maxYSpeed = difficultyLevel.getMaxYSpeed();
+            if (ySpeed > 0) {
+                if (ySpeed > maxYSpeed) {
+                    ySpeed = maxYSpeed;
+                } else {
+                    ySpeed -= delta * difficultyLevel.getyAcceleration();
+                    ySpeed = Math.max(ySpeed, 0);
+                }
+            } else if (ySpeed < 0) {
+                if (ySpeed < -maxYSpeed) {
+                    ySpeed = -maxYSpeed;
+                } else {
+                    ySpeed += delta * difficultyLevel.getyAcceleration();
+                    ySpeed = Math.min(ySpeed, 0);
+                }
             }
         }
+
     }
 }

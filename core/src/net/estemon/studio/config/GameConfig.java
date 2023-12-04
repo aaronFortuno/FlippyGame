@@ -15,6 +15,9 @@ public class GameConfig {
     public static final float WORLD_CENTER_X = WORLD_WIDTH / 2; // world units
     public static final float WORLD_CENTER_Y = WORLD_HEIGHT / 2; // world units
 
+    public static final float GRAVITY = -0.098f;
+
+
     // Common plane values
     public static final float PLANE_BOUNDS_RADIUS = 0.3f; // world units
     public static final float PLANE_SIZE = 0.8f; // world units
@@ -57,6 +60,7 @@ public class GameConfig {
 
     // Plane rotation
     public static final float PLANE_ROTATION_SPEED = 100f;
+    public static final float PLANE_DESTROYED_ROTATION_SPEED = PLANE_ROTATION_SPEED * 6f;
     public static final int PLANE_NORMAL_ANGLE = 0;
     public static final int PLANE_MAX_ANGLE = 20;
     public static final int PLANE_MIN_ANGLE = -PLANE_MAX_ANGLE;
@@ -65,7 +69,6 @@ public class GameConfig {
     public static final int BULLET_MAX_COUNT = 3;
     public static final float BULLET_RADIUS = 0.1f;
     public static final float BULLET_INIT_SPEED = 0.1f;
-    public static final float BULLET_GRAVITY = -0.098f;
     public static final float BULLET_WIDTH = 0.38f;
     public static final float BULLET_HEIGHT = 0.26f;
 

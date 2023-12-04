@@ -11,6 +11,8 @@ public class Bullet extends GameObjectBase implements Pool.Poolable {
     private float xSpeed = GameConfig.BULLET_INIT_SPEED;
     private float ySpeed;
 
+    private float angle;
+
     private float timer;
 
     public Bullet() {
@@ -25,10 +27,21 @@ public class Bullet extends GameObjectBase implements Pool.Poolable {
         this.ySpeed = ySpeed;
     }
 
+    public void setAngle(float angle) {
+        this.angle = angle;
+    }
+
+    public float getAngle() {
+        return angle;
+    }
+
     public void update(float delta) {
         setX(getX() + xSpeed);
-        ySpeed += GameConfig.BULLET_GRAVITY * delta;
+        ySpeed += GameConfig.GRAVITY * delta;
         setY(getY() + ySpeed);
+
+        angle = (float) Math.toDegrees(Math.atan2(ySpeed, xSpeed));
+
         timer += delta;
     }
 

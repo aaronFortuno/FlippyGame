@@ -30,7 +30,7 @@ public class GameController {
 
     // Player
     private Player player;
-    private float rotationAngle = GameConfig.PLANE_NORMAL_ANGLE; // initial rotation angle
+    private float playerRotationAngle = GameConfig.PLANE_NORMAL_ANGLE; // initial rotation angle
     private float ySpeed = 0;
     private float inputY1;
     private float inputY2;
@@ -149,7 +149,7 @@ public class GameController {
     public Array<Bullet> getBullets() { return bullets; }
     public Array<Enemy> getEnemies() { return enemies; }
     public Array<Bonus> getBonuses() { return bonuses; }
-    public double getRotationAngle() { return rotationAngle; }
+    public double getPlayerRotationAngle() { return playerRotationAngle; }
     public int getLives() { return lives; }
     public int getDisplayScore() { return displayScore; }
 
@@ -199,6 +199,7 @@ public class GameController {
     private void updateBullets(float delta) {
         for (Bullet bullet : bullets) {
             bullet.update(delta);
+            isBulletCollidingWithEnemy(bullet);
         }
         removePassedBullets();
     }
@@ -207,7 +208,7 @@ public class GameController {
         float xPos = player.getX();
         float yPos = player.getY();
 
-        double angleInRadians = Math.toRadians(getRotationAngle());
+        double angleInRadians = Math.toRadians(getPlayerRotationAngle());
         float initSpeed = GameConfig.BULLET_INIT_SPEED;
 
         double bulletXSpeed = initSpeed * Math.cos(angleInRadians);
@@ -216,6 +217,7 @@ public class GameController {
         if (bullets.size < GameConfig.BULLET_MAX_COUNT) {
             Bullet bullet = bulletPool.obtain();
             bullet.setPosition(xPos, yPos);
+            bullet.setAngle((float) getPlayerRotationAngle());
             bullet.setxSpeed((float) bulletXSpeed);
             bullet.setySpeed((float) bulletYSpeed);
             System.out.println("[BULLET!] pool.size: " + bullets.size);
@@ -238,6 +240,17 @@ public class GameController {
                 bulletPool.free(first);
             }
         }
+    }
+
+    private boolean isBulletCollidingWithEnemy(Bullet bullet) {
+        for (Enemy enemy : enemies) {
+            if (enemy.isNotHit() && enemy.isBulletColliding(bullet)) {
+                System.out.println("[DESTROYED!]");
+                crashSound.play(0.7f);
+                return true;
+            }
+        }
+        return false;
     }
 
     /************** PLAYER ***************/
@@ -370,25 +383,25 @@ public class GameController {
 
     public void goUp(float delta) {
         ySpeed += delta * GameConfig.PLAYER_ACCELERATION_Y;
-        rotationAngle += delta * GameConfig.PLANE_ROTATION_SPEED;
-        rotationAngle = Math.min(rotationAngle, GameConfig.PLANE_MAX_ANGLE);
+        playerRotationAngle += delta * GameConfig.PLANE_ROTATION_SPEED;
+        playerRotationAngle = Math.min(playerRotationAngle, GameConfig.PLANE_MAX_ANGLE);
     }
 
     public void goDown(float delta) {
         ySpeed -= delta * GameConfig.PLAYER_ACCELERATION_Y;
-        rotationAngle -= delta * GameConfig.PLANE_ROTATION_SPEED;
-        rotationAngle = Math.max(rotationAngle, GameConfig.PLANE_MIN_ANGLE);
+        playerRotationAngle -= delta * GameConfig.PLANE_ROTATION_SPEED;
+        playerRotationAngle = Math.max(playerRotationAngle, GameConfig.PLANE_MIN_ANGLE);
     }
 
 
     public void goStraight(float delta) {
         // Normalising rotation angle
-        if (rotationAngle > 0) {
-            rotationAngle -= delta * GameConfig.PLANE_ROTATION_SPEED;
-            rotationAngle = Math.max(rotationAngle, 0);
-        } else if (rotationAngle < 0) {
-            rotationAngle += delta * GameConfig.PLANE_ROTATION_SPEED;
-            rotationAngle = Math.min(rotationAngle, 0);
+        if (playerRotationAngle > 0) {
+            playerRotationAngle -= delta * GameConfig.PLANE_ROTATION_SPEED;
+            playerRotationAngle = Math.max(playerRotationAngle, 0);
+        } else if (playerRotationAngle < 0) {
+            playerRotationAngle += delta * GameConfig.PLANE_ROTATION_SPEED;
+            playerRotationAngle = Math.min(playerRotationAngle, 0);
         }
 
         // Normalising y speed
@@ -540,7 +553,7 @@ public class GameController {
     private void updateScore(float delta) {
         scoreTimer += delta;
         if (scoreTimer >= GameConfig.SCORE_MAX_TIME) {
-            score += MathUtils.random(1, 5);
+            score += MathUtils.random(1, 5) * difficultyLevel.getBonusMultiplier();
             scoreTimer = 0f;
         }
     }

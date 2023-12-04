@@ -1,12 +1,9 @@
 package net.estemon.studio.screens.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,8 +11,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -231,14 +226,14 @@ public class GameRenderer implements Disposable {
                     originX, originY,
                     GameConfig.BULLET_WIDTH, GameConfig.BULLET_HEIGHT,
                     1f, 1f,
-                    (float) controller.getRotationAngle()
+                    bullet.getAngle()
             );
         }
     }
 
     private void drawPlayer(float delta) {
         // Get plane rotation angle to draw it accordingly to its ySpeed
-        double rotationAngle = controller.getRotationAngle();
+        double rotationAngle = controller.getPlayerRotationAngle();
         Player player = controller.getPlayer();
         TextureRegion currentFrame = (TextureRegion) playerAnim.getKeyFrame(propellerAnimationTime, true);
         batch.draw(currentFrame,
@@ -329,7 +324,7 @@ public class GameRenderer implements Disposable {
                     enemy.getX(), enemy.getY(),
                     enemy.getWidth() / 2, enemy.getHeight() / 2,
                     enemy.getWidth(), enemy.getHeight(),
-                    GameConfig.ENEMY_SIZE, GameConfig.ENEMY_SIZE, 0);
+                    GameConfig.ENEMY_SIZE, GameConfig.ENEMY_SIZE, enemy.getAngle());
         }
     }
 
@@ -353,7 +348,7 @@ public class GameRenderer implements Disposable {
     }
 
     private void drawDebug() {
-        double rotationAngle = controller.getRotationAngle();
+        double rotationAngle = controller.getPlayerRotationAngle();
 
         // Render bullets debug
         for (Bullet bullet : controller.getBullets()) {
