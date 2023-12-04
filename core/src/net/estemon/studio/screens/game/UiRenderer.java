@@ -57,11 +57,33 @@ public class UiRenderer extends ScreenAdapter {
         TextureAtlas gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS);
         livesTexture = gameplayAtlas.findRegion(RegionNames.PLAYER);
 
+        // Screen table
+        Table table = new Table();
+        table.top();
+        table.setFillParent(true);
+
+        scoreLabel = new Label("SCORE: ", skin);
+
+        Table livesTable = new Table();
+        int maxLives = GameConfig.PLAYER_START_LIVES;
+        livesImages = new Image[maxLives];
+        for (int i = 0; i < maxLives; i++)
+        {
+            livesImages[i] = new Image(livesTexture);
+            livesTable.add(livesImages[i]).size(30).pad(5).right();
+        }
+
         // Pause button
-        //pauseButtonTexture = gameplayAtlas.findRegion(RegionNames.PAUSE_BUTTON);
-        //pauseButtonImage = new Image(pauseButtonTexture);
-        //pauseButtonImage.setScale(0.6f);
-        //pauseButtonImage.setColor(1, 1, 1, 0.5f);
+        pauseButtonTexture = gameplayAtlas.findRegion(RegionNames.PAUSE_BUTTON);
+        pauseButtonImage = new Image(pauseButtonTexture);
+        pauseButtonImage.setColor(1, 1, 1, 0.5f);
+
+        pauseButtonImage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.setPaused(!controller.isPaused());
+            }
+        });
 
         // UI Buttons
         boolean showUiButtons = GameManager.INSTANCE.getShowButtons();
@@ -107,36 +129,21 @@ public class UiRenderer extends ScreenAdapter {
         }
 
 
-        // Screen table
-        Table table = new Table();
-        table.top();
-        table.setFillParent(true);
-
-        scoreLabel = new Label("SCORE: ", skin);
-
-        Table livesTable = new Table();
-        int maxLives = GameConfig.PLAYER_START_LIVES;
-        livesImages = new Image[maxLives];
-        for (int i = 0; i < maxLives; i++)
-        {
-            livesImages[i] = new Image(livesTexture);
-            livesTable.add(livesImages[i]).size(30).pad(5).right();
-        }
 
         // Buttons table
         Table buttonsTable = new Table();
-        //buttonsTable.debugAll();
-        //buttonsTable.add(pauseButtonImage).expandY().right().row();
+        buttonsTable.debugAll();
+        buttonsTable.add().expandY();
+        buttonsTable.add(pauseButtonImage).expandY().size(80, 80).right().top().row();
         buttonsTable.bottom();
         buttonsTable.add(upButtonImage).left().expand();
         buttonsTable.add(downButtonImage).right().expand();
 
-
         // Adding to screen table
         table.add(scoreLabel).pad(20).padLeft(150).expandX().left();
         table.add(livesTable).pad(20).row();
-        table.add(buttonsTable).pad(20).colspan(2).expand().bottom().fillX();
-        //table.debugAll();
+        table.add(buttonsTable).pad(20).colspan(2).expand().bottom().fillX().fillY();
+        table.debugAll();
 
         // Add to stage
         stage.getRoot().getColor().a = 0;
@@ -149,9 +156,18 @@ public class UiRenderer extends ScreenAdapter {
         scoreLabel.setText(scoreText);
 
         updateLives(controller.getLives());
+        updatePause(controller.isPaused());
 
         stage.act();
         stage.draw();
+    }
+
+    private void updatePause(boolean paused) {
+        if (controller.isPaused()) {
+            pauseButtonImage.setVisible(false);
+        } else {
+            pauseButtonImage.setVisible(true);
+        }
     }
 
     private void updateLives(int lives) {

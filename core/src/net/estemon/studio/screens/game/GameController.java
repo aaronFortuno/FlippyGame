@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Pools;
 import net.estemon.studio.FlippyGame;
 import net.estemon.studio.assets.AssetDescriptors;
 import net.estemon.studio.common.GameManager;
+import net.estemon.studio.common.GameMusic;
 import net.estemon.studio.config.DifficultyLevel;
 import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Background;
@@ -20,6 +21,7 @@ import net.estemon.studio.entity.BonusKind;
 import net.estemon.studio.entity.Bullet;
 import net.estemon.studio.entity.Enemy;
 import net.estemon.studio.entity.Player;
+import net.estemon.studio.screens.menu.SplashScreen;
 
 public class GameController {
 
@@ -27,6 +29,7 @@ public class GameController {
 
     private Background background;
     private DifficultyLevel difficultyLevel;
+    private boolean isPaused;
 
     // Player
     private Player player;
@@ -67,6 +70,8 @@ public class GameController {
     private boolean shouldGoUp;
     private boolean shouldGoDown;
     private boolean shouldGoStraight;
+
+    public float pausedMusicVolume = 0.5f;
 
 
     public GameController(FlippyGame game) {
@@ -123,27 +128,36 @@ public class GameController {
             return;
         }
 
-        updateBullets(delta);
-        updatePlayer(delta);
-        updateBonus(delta);
+        if (!isPaused) {
+            updateBullets(delta);
+            updatePlayer(delta);
+            updateBonus(delta);
 
-        Bonus collidedBonus = isPlayerCollidingWithBonus();
-        if (collidedBonus != null) {
-            updateScore(collidedBonus.getValue());
-        }
+            Bonus collidedBonus = isPlayerCollidingWithBonus();
+            if (collidedBonus != null) {
+                updateScore(collidedBonus.getValue());
+            }
 
-        updateEnemies(delta);
-        updateScore(delta);
-        updateDisplayScore(delta);
-        if (isPlayerCollidingWithEnemy()) {
-            lives--;
-            if (isGameOver()) {
-                GameManager.INSTANCE.updateHighScore(score);
+            updateEnemies(delta);
+            updateScore(delta);
+            updateDisplayScore(delta);
+            if (isPlayerCollidingWithEnemy()) {
+                lives--;
+                if (isGameOver()) {
+                    GameManager.INSTANCE.updateHighScore(score);
+                }
+            }
+        } else {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) ||
+                Gdx.input.justTouched()
+            ) {
+                setPaused(false);
             }
         }
+
     }
 
-    // Getters
+    // Getters and setters
     public Background getBackground() { return background; }
     public Player getPlayer() { return player; }
     public Array<Bullet> getBullets() { return bullets; }
@@ -152,6 +166,11 @@ public class GameController {
     public double getPlayerRotationAngle() { return playerRotationAngle; }
     public int getLives() { return lives; }
     public int getDisplayScore() { return displayScore; }
+    public boolean isPaused() { return isPaused; }
+    public void setPaused(boolean isPaused) {
+        this.isPaused = isPaused;
+    }
+
 
     // Handle UI button touches
     public boolean isShouldGoUp() {
@@ -425,7 +444,7 @@ public class GameController {
     /*************** BONUS ****************/
     private void updateBonus(float delta) {
         for (Bonus bonus : bonuses) {
-            bonus.update(delta);
+            bonus.update();
         }
         createNewBonus(delta);
         removePassedBonuses();

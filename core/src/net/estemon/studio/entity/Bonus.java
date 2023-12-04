@@ -42,10 +42,9 @@ public class Bonus extends GameObjectBase implements Pool.Poolable {
         return value;
     }
 
-    public void update (float delta) {
+    public void update () {
         // Bonuses travel faster than enemies
         setX(getX() - getxSpeed() * 1.2f);
-        // timer += delta;
     }
 
     public void setXSpeed(float xSpeed) {

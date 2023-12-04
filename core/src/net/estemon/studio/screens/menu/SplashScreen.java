@@ -15,6 +15,7 @@ import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 import net.estemon.studio.FlippyGame;
 import net.estemon.studio.assets.AssetDescriptors;
 import net.estemon.studio.assets.RegionNames;
+import net.estemon.studio.common.GameMusic;
 import net.estemon.studio.screens.common.BaseScreen;
 import net.estemon.studio.screens.game.GameScreen;
 
@@ -34,7 +35,8 @@ public class SplashScreen extends BaseScreen {
         // Setup background music
         music = assetManager.get(AssetDescriptors.GAME_MUSIC);
         music.setLooping(true);
-        music.setVolume(1f);
+        GameMusic musicVolume = new GameMusic();
+        music.setVolume(musicVolume.getMusicVolume());
         music.play();
 
         // Setup screen table

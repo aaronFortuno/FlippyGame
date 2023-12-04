@@ -18,7 +18,7 @@ public class AssetPaths {
     public static final String UI_SKIN = "ui-skin.json";
 
 
-    // Music by xsgianni from https://freesound.org/people/xsgianni/sounds/388079/
+    // GameMusic by xsgianni from https://freesound.org/people/xsgianni/sounds/388079/
     // CC BY-NC 4.0 DEED https://creativecommons.org/licenses/by-nc/4.0/
     public static final String GAME_MUSIC = "sounds/game_music.mp3";
 
