@@ -3,7 +3,6 @@ package net.estemon.studio.screens.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
@@ -18,6 +17,7 @@ import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Background;
 import net.estemon.studio.entity.Bonus;
 import net.estemon.studio.entity.BonusKind;
+import net.estemon.studio.entity.Bullet;
 import net.estemon.studio.entity.Enemy;
 import net.estemon.studio.entity.Player;
 
@@ -42,6 +42,9 @@ public class GameController {
     private Pool<Enemy> enemiesPool;
     private boolean isEnemyMovingY = GameConfig.IS_ENEMY_MOVING_Y;
 
+    // Bullets
+    private final Array<Bullet> bullets = new Array<>();
+    private Pool<Bullet> bulletPool;
 
     // Bonus and scoring
     private final Array<Bonus> bonuses = new Array<>();
@@ -98,6 +101,9 @@ public class GameController {
                 GameConfig.WORLD_HEIGHT
         );
 
+        // Init bullet pool
+        bulletPool = Pools.get(Bullet.class, GameConfig.BULLET_MAX_COUNT);
+
         // Init bonus pool
         bonusesPool = Pools.get(Bonus.class, GameConfig.BONUS_MAX_COUNT);
 
@@ -116,6 +122,8 @@ public class GameController {
         if (isGameOver()) {
             return;
         }
+
+        updateBullets(delta);
         updatePlayer(delta);
         updateBonus(delta);
 
@@ -124,7 +132,7 @@ public class GameController {
             updateScore(collidedBonus.getValue());
         }
 
-        updateEnemies(delta);
+        // updateEnemies(delta);
         updateScore(delta);
         updateDisplayScore(delta);
         if (isPlayerCollidingWithEnemy()) {
@@ -138,23 +146,19 @@ public class GameController {
     // Getters
     public Background getBackground() { return background; }
     public Player getPlayer() { return player; }
+    public Array<Bullet> getBullets() { return bullets; }
     public Array<Enemy> getEnemies() { return enemies; }
     public Array<Bonus> getBonuses() { return bonuses; }
-    public float getRotationAngle() { return rotationAngle; }
+    public double getRotationAngle() { return rotationAngle; }
     public int getLives() { return lives; }
     public int getDisplayScore() { return displayScore; }
 
+    // Handle UI button touches
     public boolean isShouldGoUp() {
         return shouldGoUp;
     }
-
-
-
     public boolean isShouldGoDown() {
         return shouldGoDown;
-    }
-    public boolean isShouldGoStraight() {
-        return shouldGoStraight;
     }
 
     public void setShouldGoUp(boolean shouldGoUp) {
@@ -191,6 +195,51 @@ public class GameController {
 
 
     // Private methods
+    /************** BULLETS **************/
+    private void updateBullets(float delta) {
+        for (Bullet bullet : bullets) {
+            bullet.update(delta);
+        }
+        removePassedBullets();
+    }
+
+    private void createNewBullet() {
+        float xPos = player.getX();
+        float yPos = player.getY();
+
+        double angleInRadians = Math.toRadians(getRotationAngle());
+        float initSpeed = GameConfig.BULLET_INIT_SPEED;
+
+        double bulletXSpeed = initSpeed * Math.cos(angleInRadians);
+        double bulletYSpeed = initSpeed * Math.sin(angleInRadians) + ySpeed;
+
+        if (bullets.size < GameConfig.BULLET_MAX_COUNT) {
+            Bullet bullet = bulletPool.obtain();
+            bullet.setPosition(xPos, yPos);
+            bullet.setxSpeed((float) bulletXSpeed);
+            bullet.setySpeed((float) bulletYSpeed);
+            System.out.println("[BULLET!] pool.size: " + bullets.size);
+
+            bullets.add(bullet);
+        } else {
+            System.out.println("[MAX BULLETS!]");
+        }
+
+    }
+
+    private void removePassedBullets() {
+        if (bullets.size > 0) {
+            Bullet first = bullets.first();
+
+            float maxBulletX = GameConfig.BULLET_RADIUS + 0.5f;
+
+            if (first.getX() > GameConfig.WORLD_WIDTH + maxBulletX) {
+                bullets.removeValue(first, true);
+                bulletPool.free(first);
+            }
+        }
+    }
+
     /************** PLAYER ***************/
     private boolean isPlayerCollidingWithEnemy() {
         for (Enemy enemy : enemies) {
@@ -231,6 +280,10 @@ public class GameController {
         float screenHeight = Gdx.graphics.getHeight();
         inputY1 = screenHeight - Gdx.input.getY(); // Inverse Y axis system
         boolean isTouched = Gdx.input.isTouched();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            createNewBullet();
+        }
 
         if (Gdx.input.isKeyPressed(Input.Keys.UP) || isShouldGoUp()) {
             if (checkIfCanGoUp()) {
@@ -277,60 +330,6 @@ public class GameController {
             inputY2 = -1;
             goStraight(delta);
         }
-
-/*        if (isTouched) {
-
-            // Check if is first touching
-            if (inputY2 == -1) {
-                inputY2 = inputY1;
-            }
-
-            // Relative change at Y
-            float deltaY = inputY1 - inputY2;
-
-            // Check if there's significative change
-            if (Math.abs(deltaY) > 2) {
-                if (deltaY > 0) {
-                    if (checkIfCanGoUp()) {
-                        goUp(delta);
-                    } else {
-                        goStraight(delta);
-                    }
-                } else {
-                    if (checkIfCanGoDown()) {
-                        goDown(delta);
-                    } else {
-                        goStraight(delta);
-                    }
-                }
-            }
-
-            // Update inputY2 at end of touching
-            inputY2 = inputY1;
-        } else {
-
-            // Reset inputY2 if there's no touch
-            inputY2 = -1;
-        }*/
-
-            /*// Handle keystrokes only if there's no touching screen or dragging player
-            if (Gdx.input.isKeyPressed(Input.Keys.UP) || isShouldGoUp()) {
-                if (checkIfCanGoUp()) {
-                    goUp(delta);
-                } else {
-                    goStraight(delta);
-                }
-            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || isShouldGoDown()) {
-                if (checkIfCanGoDown()) {
-                    goDown(delta);
-                } else {
-                    goStraight(delta);
-                }
-            } else {
-                goStraight(delta);
-            }*/
-
-
 
         player.setY(player.getY() + ySpeed);
         blockPlayerFromLeavingTheWorld();
@@ -422,7 +421,6 @@ public class GameController {
     private void createNewBonus(float delta) {
         bonusTimer += delta;
         if (bonusTimer >= difficultyLevel.getBonusSpawnTime()) {
-            System.out.println("[bonus spawnTime] " + difficultyLevel.getBonusSpawnTime());
             float min = 0f + GameConfig.BONUS_SIZE / 2;
             float max = GameConfig.WORLD_HEIGHT - GameConfig.BONUS_SIZE / 2;
             float bonusX = GameConfig.WORLD_WIDTH;
@@ -438,7 +436,6 @@ public class GameController {
                 bonus.setKind(BonusKind.BRONZE);
             }
             bonus.setXSpeed(difficultyLevel.getxSpeed());
-            System.out.println("[bonus xSpeed] " + bonus.getxSpeed());
             bonus.setPosition(bonusX, bonusY);
 
             bonuses.add(bonus);
@@ -550,7 +547,6 @@ public class GameController {
 
     private void updateScore(int bonusPoints) {
         int totalPoints = bonusPoints * difficultyLevel.getBonusMultiplier();
-        System.out.println("[bonus points] " + totalPoints);
         score += totalPoints;
     }
 

@@ -61,6 +61,14 @@ public class GameConfig {
     public static final int PLANE_MAX_ANGLE = 20;
     public static final int PLANE_MIN_ANGLE = -PLANE_MAX_ANGLE;
 
+    // Bullets
+    public static final int BULLET_MAX_COUNT = 3;
+    public static final float BULLET_RADIUS = 0.1f;
+    public static final float BULLET_INIT_SPEED = 0.1f;
+    public static final float BULLET_GRAVITY = -0.098f;
+    public static final float BULLET_WIDTH = 0.38f;
+    public static final float BULLET_HEIGHT = 0.26f;
+
     // Bonus values
     public static final int BONUS_MAX_COUNT = 5;
     public static final float BONUS_SIZE = 0.8f;

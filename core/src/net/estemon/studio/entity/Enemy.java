@@ -19,6 +19,7 @@ public class Enemy extends GameObjectBase implements Pool.Poolable {
     private float timer = 0f;
     private boolean goUp;
     private boolean goDown;
+    private boolean destroyed;
 
 
     public float getTimer() {
@@ -80,6 +81,10 @@ public class Enemy extends GameObjectBase implements Pool.Poolable {
         return !hit;
     }
 
+    public void setDestroyed(boolean destroyed) {
+        this.destroyed = destroyed;
+    }
+
     @Override
     public void reset() {
         // Reset enemy hit to reuse at pooling
@@ -88,6 +93,7 @@ public class Enemy extends GameObjectBase implements Pool.Poolable {
         goUp = false;
         goDown = false;
         ySpeed = 0;
+        destroyed = false;
     }
 
     public void goUp(float delta) {

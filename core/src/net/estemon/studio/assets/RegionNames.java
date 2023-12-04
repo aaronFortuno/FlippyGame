@@ -9,4 +9,5 @@ public class RegionNames {
     public static final String UP_BUTTON = "arrowUp";
     public static final String DOWN_BUTTON = "arrowDown";
     public static final String PAUSE_BUTTON = "pause";
+    public static final String BULLET = "bullet";
 }

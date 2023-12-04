@@ -81,14 +81,12 @@ public class UiRenderer extends ScreenAdapter {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     controller.setShouldGoUp(true);
-                    System.out.println("[UP!]");
                     return true;
                 }
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                     controller.setShouldGoStraight(true);
-                    System.out.println("[STRAIGHT!]");
                 }
             });
 
@@ -98,14 +96,12 @@ public class UiRenderer extends ScreenAdapter {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     controller.setShouldGoDown(true);
-                    System.out.println("[DOWN!]");
                     return true;
                 }
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                     controller.setShouldGoStraight(true);
-                    System.out.println("[STRAIGHT!]");
                 }
             });
         }

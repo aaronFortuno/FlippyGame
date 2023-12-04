@@ -1,10 +1,12 @@
 package net.estemon.studio.screens.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,6 +27,7 @@ import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Background;
 import net.estemon.studio.entity.Bonus;
 import net.estemon.studio.entity.BonusKind;
+import net.estemon.studio.entity.Bullet;
 import net.estemon.studio.entity.Enemy;
 import net.estemon.studio.entity.Player;
 import net.estemon.studio.utils.GdxUtils;
@@ -65,6 +68,11 @@ public class GameRenderer implements Disposable {
     public static Animation enemyAnim;
     public static float propellerAnimationTime = 0f;
 
+    // Bullets
+    public static TextureRegion bulletTexture;
+
+
+    // Bonuses
     public static TextureRegion[] bonus;
     public static Animation bonusAnim;
     public static float bonusAnimationTime = 0f;
@@ -98,6 +106,8 @@ public class GameRenderer implements Disposable {
         backgroundRegion = gameplayAtlas.findRegion(RegionNames.BACKGROUND);
         backgroundX = 0;
         backgroundX2 = 12;
+
+        bulletTexture = gameplayAtlas.findRegion(RegionNames.BULLET);
         
         Animations.playerPlaneAnimation(assetManager);
         Animations.enemyPlaneAnimation(assetManager);
@@ -134,7 +144,7 @@ public class GameRenderer implements Disposable {
         renderGamePlay(delta);
 
         // Render debug graphics
-        // renderDebug();
+        renderDebug();
     }
 
     public void updateBackground(float delta) {
@@ -169,10 +179,11 @@ public class GameRenderer implements Disposable {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
-        drawBackground(); // uncomment to draw bg textures
-        drawPlayer(delta); // uncomment to draw player textures
+        // drawBackground();
+        drawBullets(delta);
+        drawPlayer(delta);
         drawBonus(delta);
-        drawEnemies(); // uncomment to draw enemy planes textures
+        drawEnemies();
 
         int lives = controller.getLives();
         if (lives < GameConfig.PLAYER_START_LIVES) {
@@ -209,9 +220,25 @@ public class GameRenderer implements Disposable {
         }
     }
 
+    private void drawBullets(float delta) {
+        for (Bullet bullet : controller.getBullets()) {
+            float originX = GameConfig.BULLET_WIDTH / 2;
+            float originY = GameConfig.BULLET_HEIGHT / 2;
+            batch.draw(
+                    bulletTexture,
+                    bullet.getBounds().x - GameConfig.BULLET_WIDTH,
+                    bullet.getBounds().y - originY,
+                    originX, originY,
+                    GameConfig.BULLET_WIDTH, GameConfig.BULLET_HEIGHT,
+                    1f, 1f,
+                    (float) controller.getRotationAngle()
+            );
+        }
+    }
+
     private void drawPlayer(float delta) {
         // Get plane rotation angle to draw it accordingly to its ySpeed
-        float rotationAngle = controller.getRotationAngle();
+        double rotationAngle = controller.getRotationAngle();
         Player player = controller.getPlayer();
         TextureRegion currentFrame = (TextureRegion) playerAnim.getKeyFrame(propellerAnimationTime, true);
         batch.draw(currentFrame,
@@ -219,7 +246,7 @@ public class GameRenderer implements Disposable {
                 player.getWidth() / 2, player.getHeight() / 2,
                 player.getWidth(), player.getHeight(),
                 GameConfig.PLAYER_SIZE, GameConfig.PLAYER_SIZE,
-                rotationAngle
+                (float) rotationAngle
         );
         int lives = controller.getLives();
         if (lives < GameConfig.PLAYER_START_LIVES) {
@@ -326,10 +353,15 @@ public class GameRenderer implements Disposable {
     }
 
     private void drawDebug() {
-        float rotationAngle = controller.getRotationAngle();
+        double rotationAngle = controller.getRotationAngle();
+
+        // Render bullets debug
+        for (Bullet bullet : controller.getBullets()) {
+            bullet.drawDebug(renderer);
+        }
 
         // Render player debug
-        controller.getPlayer().drawDebug(renderer, rotationAngle);
+        controller.getPlayer().drawDebug(renderer, (float) rotationAngle);
 
         // Render enemies debug
         for (Enemy enemy : controller.getEnemies()) {

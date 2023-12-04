@@ -81,13 +81,11 @@ public class SettingsScreen extends BaseScreen {
         // Show buttons checkbox
         final CheckBox showButtons = checkBox("UI buttons", skin);
         showButtons.setChecked(GameManager.INSTANCE.getShowButtons());
-        System.out.println("[showUiButtons?] " + GameManager.INSTANCE.getShowButtons());
 
         showButtons.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 GameManager.INSTANCE.updateShowButtons(showButtons.isChecked());
-                System.out.println("[changeShowUiButtons] " + GameManager.INSTANCE.getShowButtons());
             }
         });
 
