@@ -16,6 +16,7 @@ public class GameConfig {
     public static final float WORLD_CENTER_Y = WORLD_HEIGHT / 2; // world units
 
     public static final float GRAVITY = -0.098f;
+    public static final float FADE_DURATION = 0.5f;
 
 
     // Common plane values

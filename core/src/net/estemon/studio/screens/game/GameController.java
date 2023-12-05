@@ -26,6 +26,7 @@ import net.estemon.studio.screens.menu.SplashScreen;
 public class GameController {
 
     private final AssetManager assetManager;
+    private GameMusic music;
 
     private Background background;
     private DifficultyLevel difficultyLevel;
@@ -71,11 +72,10 @@ public class GameController {
     private boolean shouldGoDown;
     private boolean shouldGoStraight;
 
-    public float pausedMusicVolume = 0.5f;
 
-
-    public GameController(FlippyGame game) {
+    public GameController(FlippyGame game, GameMusic music) {
         assetManager = game.getAssetManager();
+        this.music = music;
         init();
     }
 
@@ -129,6 +129,9 @@ public class GameController {
         }
 
         if (!isPaused) {
+            if (music.getVolume() != 1.0f) {
+                music.setVolume(1.0f);
+            }
             updateBullets(delta);
             updatePlayer(delta);
             updateBonus(delta);
@@ -148,6 +151,7 @@ public class GameController {
                 }
             }
         } else {
+            music.setVolume(0.5f);
             if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) ||
                 Gdx.input.justTouched()
             ) {

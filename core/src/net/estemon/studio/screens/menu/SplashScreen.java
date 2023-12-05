@@ -23,7 +23,7 @@ public class SplashScreen extends BaseScreen {
 
     private final AssetManager assetManager;
 
-    private Music music;
+    private GameMusic music;
 
     public SplashScreen(FlippyGame game) {
         super(game);
@@ -33,11 +33,7 @@ public class SplashScreen extends BaseScreen {
     @Override
     protected Actor createUi() {
         // Setup background music
-        music = assetManager.get(AssetDescriptors.GAME_MUSIC);
-        music.setLooping(true);
-        GameMusic musicVolume = new GameMusic();
-        music.setVolume(musicVolume.getMusicVolume());
-        music.play();
+        music = new GameMusic(assetManager);
 
         // Setup screen table
         Table table = new Table();
@@ -63,7 +59,7 @@ public class SplashScreen extends BaseScreen {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new GameScreen(game, music));
             }
         });
 

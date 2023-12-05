@@ -3,9 +3,9 @@ package net.estemon.studio.screens.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -13,10 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.estemon.studio.assets.AssetDescriptors;
@@ -132,7 +129,7 @@ public class UiRenderer extends ScreenAdapter {
 
         // Buttons table
         Table buttonsTable = new Table();
-        buttonsTable.debugAll();
+        //buttonsTable.debugAll();
         buttonsTable.add().expandY();
         buttonsTable.add(pauseButtonImage).expandY().size(80, 80).right().top().row();
         buttonsTable.bottom();
@@ -143,26 +140,30 @@ public class UiRenderer extends ScreenAdapter {
         table.add(scoreLabel).pad(20).padLeft(150).expandX().left();
         table.add(livesTable).pad(20).row();
         table.add(buttonsTable).pad(20).colspan(2).expand().bottom().fillX().fillY();
-        table.debugAll();
+        //table.debugAll();
 
         // Add to stage
         stage.getRoot().getColor().a = 0;
-        stage.getRoot().addAction(Actions.fadeIn(2));
+        stage.getRoot().addAction(Actions.fadeIn(1));
         stage.addActor(table);
     }
     @Override
     public void render(float delta) {
         String scoreText = "SCORE: " + controller.getDisplayScore();
-        scoreLabel.setText(scoreText);
+        if (!controller.isPaused()) {
+            scoreLabel.setText(scoreText);
+        } else {
+            scoreLabel.setText("");
+        }
 
         updateLives(controller.getLives());
-        updatePause(controller.isPaused());
+        updatePause();
 
         stage.act();
         stage.draw();
     }
 
-    private void updatePause(boolean paused) {
+    private void updatePause() {
         if (controller.isPaused()) {
             pauseButtonImage.setVisible(false);
         } else {

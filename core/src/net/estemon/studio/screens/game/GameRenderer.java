@@ -3,6 +3,7 @@ package net.estemon.studio.screens.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -48,7 +49,9 @@ public class GameRenderer implements Disposable {
     private float backgroundX2;
     private boolean drawStatic;
 
-    private int previousY = 0;
+    // Pause game
+    private float screenFadeAlpha = 0f;
+    private boolean isFading;
 
     // Particles
     private ParticleEffect particleEffect1;
@@ -70,7 +73,7 @@ public class GameRenderer implements Disposable {
     // Bonuses
     public static TextureRegion[] bonus;
     public static Animation bonusAnim;
-    public static float bonusAnimationTime = 0f;
+
 
     // Getter for UiRenderer
     public Viewport getUiViewport() { return uiViewport; }
@@ -187,8 +190,11 @@ public class GameRenderer implements Disposable {
                 particleEffect2.draw(batch, delta);
             }
         }
-
         batch.end();
+
+        // Draw attenuated rectangle in case of paused game
+        updateFade(delta);
+        updateGamePaused();
     }
 
     private void drawBackground() {
@@ -366,6 +372,34 @@ public class GameRenderer implements Disposable {
         // Render bonuses debug
         for (Bonus bonus : controller.getBonuses()) {
             bonus.drawDebug(renderer);
+        }
+    }
+
+    /************* GAME PAUSED ***************/
+    private void updateGamePaused() {
+        if (screenFadeAlpha > 0f) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            renderer.begin(ShapeRenderer.ShapeType.Filled);
+            renderer.setColor(0, 0, 0, screenFadeAlpha);
+            renderer.rect(0, 0, GameConfig.GAME_WIDTH, GameConfig.GAME_HEIGHT);
+            renderer.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
+    }
+
+    private void updateFade(float delta) {
+
+        // Show attenuated alpha pause game
+        if (controller.isPaused()) {
+            if (screenFadeAlpha < 0.5f) {
+                screenFadeAlpha += delta / GameConfig.FADE_DURATION;
+                screenFadeAlpha = Math.min(screenFadeAlpha, 0.5f);
+            }
+        } else {
+            if (screenFadeAlpha > 0f) {
+                screenFadeAlpha -= delta / GameConfig.FADE_DURATION;
+                screenFadeAlpha = Math.max(screenFadeAlpha, 0f);
+            }
         }
     }
 }
