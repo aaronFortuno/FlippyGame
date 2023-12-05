@@ -13,16 +13,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 
+import net.estemon.studio.FlippyGame;
 import net.estemon.studio.assets.AssetDescriptors;
 import net.estemon.studio.assets.RegionNames;
 import net.estemon.studio.common.GameManager;
 import net.estemon.studio.config.GameConfig;
+import net.estemon.studio.screens.menu.SplashScreen;
+
+import javax.imageio.stream.ImageInputStream;
 
 public class UiRenderer extends ScreenAdapter {
 
+    private FlippyGame game;
     private AssetManager assetManager;
     private GameController controller;
     protected Stage stage;
@@ -41,7 +48,13 @@ public class UiRenderer extends ScreenAdapter {
     private TextureRegion downButtonTexture;
     private Image downButtonImage;
 
-    public UiRenderer(AssetManager assetManager, Viewport uiViewport, GameController controller) {
+    private TextureRegion shootButtonTexture;
+    private Image shootButtonImage;
+
+    private boolean shownEnd;
+
+    public UiRenderer(FlippyGame game, AssetManager assetManager, Viewport uiViewport, GameController controller) {
+        this.game = game;
         this.assetManager = assetManager;
         this.stage = new Stage(uiViewport);
         this.skin = assetManager.get(AssetDescriptors.UI_SKIN);
@@ -123,24 +136,34 @@ public class UiRenderer extends ScreenAdapter {
                     controller.setShouldGoStraight(true);
                 }
             });
+
+            shootButtonTexture = gameplayAtlas.findRegion(RegionNames.SHOOT_BUTTON);
+            shootButtonImage = new Image(shootButtonTexture);
+
+            shootButtonImage.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    controller.createNewBullet();
+                }
+            });
         }
-
-
 
         // Buttons table
         Table buttonsTable = new Table();
-        //buttonsTable.debugAll();
+        // buttonsTable.debugAll();
         buttonsTable.add().expandY();
+        buttonsTable.add();
         buttonsTable.add(pauseButtonImage).expandY().size(80, 80).right().top().row();
         buttonsTable.bottom();
-        buttonsTable.add(upButtonImage).left().expand();
+        buttonsTable.add(upButtonImage).left();
+        buttonsTable.add(shootButtonImage).left().pad(20).expand();
         buttonsTable.add(downButtonImage).right().expand();
 
         // Adding to screen table
         table.add(scoreLabel).pad(20).padLeft(150).expandX().left();
         table.add(livesTable).pad(20).row();
         table.add(buttonsTable).pad(20).colspan(2).expand().bottom().fillX().fillY();
-        //table.debugAll();
+        // table.debugAll();
 
         // Add to stage
         stage.getRoot().getColor().a = 0;
@@ -158,6 +181,10 @@ public class UiRenderer extends ScreenAdapter {
 
         updateLives(controller.getLives());
         updatePause();
+
+        if (controller.isGameOver()) {
+            showFinalScore();
+        }
 
         stage.act();
         stage.draw();
@@ -187,6 +214,58 @@ public class UiRenderer extends ScreenAdapter {
             for (Image image : livesImages) {
                 image.setColor(1, 1, 1, 0.1f);
             }
+        }
+    }
+
+    private void showFinalScore() {
+        if (!shownEnd) {
+            Table table = new Table();
+            table.setFillParent(true);
+            // table.debugAll();
+            table.defaults().center();
+
+            int score = controller.getScore();
+
+            TypingLabel scoreLabel = new TypingLabel("{SLIDE}{HANG=1;0.5}" + String.valueOf(score) + " points!", skin, "title-font");
+
+            String message;
+            switch (controller.checkFinalScore()) {
+                case 0:
+                    message = "that was... it's hard to play it worse!";
+                    break;
+                case 1:
+                    message = "that's great! well done!";
+                    break;
+                case 2:
+                    message = "wow! unbelievable! hard to play better!";
+                    break;
+                default:
+                    message = "";
+            }
+
+            Label messageLabel = new Label(message, skin);
+
+            TextButton menuScreenButton = new TextButton("MENU", skin);
+            menuScreenButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    game.setScreen(new SplashScreen(game));
+                }
+            });
+
+            table.add(scoreLabel).row();
+            table.add(messageLabel).row();
+            table.add(menuScreenButton).pad(10);
+
+            stage.addActor(table);
+
+            shownEnd = true;
+
+            // Hide other screen elements
+            pauseButtonImage.setVisible(false);
+            upButtonImage.setVisible(false);
+            downButtonImage.setVisible(false);
+            shootButtonImage.setVisible(false);
         }
 
     }

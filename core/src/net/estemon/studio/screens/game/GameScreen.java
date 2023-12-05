@@ -27,7 +27,7 @@ public class GameScreen extends BaseScreen {
     public void show() {
         controller = new GameController(game, music);
         renderer = new GameRenderer(game.getBatch(), assetManager, controller);
-        uiRenderer = new UiRenderer(assetManager, renderer.getUiViewport(), controller);
+        uiRenderer = new UiRenderer(game, assetManager, renderer.getUiViewport(), controller);
     }
 
     @Override
@@ -43,7 +43,8 @@ public class GameScreen extends BaseScreen {
 
         if (controller.isGameOver()) {
             controller.stopPropellerSound();
-            game.setScreen(new SplashScreen(game));
+
+            // game.setScreen(new SplashScreen(game));
         }
     }
 

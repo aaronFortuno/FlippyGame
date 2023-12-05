@@ -1,19 +1,19 @@
 
 gameplay.png
-size: 916, 644
+size: 947, 644
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 arrowDown
   rotate: false
-  xy: 804, 532
+  xy: 2, 50
   size: 110, 110
   orig: 110, 110
   offset: 0, 0
   index: -1
 arrowUp
   rotate: false
-  xy: 804, 420
+  xy: 804, 532
   size: 110, 110
   orig: 110, 110
   offset: 0, 0
@@ -27,189 +27,196 @@ background
   index: -1
 bullet
   rotate: false
-  xy: 763, 15
+  xy: 888, 451
   size: 38, 26
   orig: 38, 26
   offset: 0, 0
   index: -1
 coin1
   rotate: false
-  xy: 2, 77
+  xy: 804, 447
   size: 82, 83
   orig: 82, 83
   offset: 0, 0
   index: -1
 coin2
   rotate: false
-  xy: 86, 77
+  xy: 226, 77
   size: 82, 83
   orig: 82, 83
   offset: 0, 0
   index: -1
 coin3
   rotate: false
-  xy: 170, 77
+  xy: 310, 77
   size: 82, 83
   orig: 82, 83
   offset: 0, 0
   index: -1
 coin4
   rotate: false
-  xy: 254, 77
+  xy: 394, 77
   size: 82, 83
   orig: 82, 83
   offset: 0, 0
   index: -1
 coin5
   rotate: false
-  xy: 338, 77
+  xy: 478, 77
   size: 82, 83
   orig: 82, 83
   offset: 0, 0
   index: -1
 coin6
   rotate: false
-  xy: 422, 77
+  xy: 562, 77
   size: 82, 83
   orig: 82, 83
   offset: 0, 0
   index: -1
 coin7
   rotate: false
-  xy: 506, 77
+  xy: 646, 77
   size: 82, 83
   orig: 82, 83
   offset: 0, 0
   index: -1
 coin8
   rotate: false
-  xy: 590, 77
+  xy: 730, 77
   size: 82, 83
   orig: 82, 83
   offset: 0, 0
   index: -1
 part1
   rotate: false
-  xy: 854, 105
+  xy: 804, 169
   size: 51, 51
   orig: 51, 51
   offset: 0, 0
   index: -1
 part2
   rotate: false
-  xy: 854, 52
+  xy: 888, 479
   size: 51, 51
   orig: 51, 51
   offset: 0, 0
   index: -1
 pause
   rotate: false
-  xy: 804, 308
+  xy: 114, 50
   size: 110, 110
   orig: 110, 110
   offset: 0, 0
   index: -1
 planeBlue1
   rotate: false
-  xy: 2, 2
+  xy: 226, 2
   size: 88, 73
   orig: 88, 73
   offset: 0, 0
   index: -1
 planeBlue2
   rotate: false
-  xy: 92, 2
+  xy: 316, 2
   size: 88, 73
   orig: 88, 73
   offset: 0, 0
   index: -1
 planeBlue3
   rotate: false
-  xy: 182, 2
+  xy: 406, 2
   size: 88, 73
   orig: 88, 73
   offset: 0, 0
   index: -1
 planeGreen1
   rotate: false
-  xy: 272, 2
+  xy: 496, 2
   size: 88, 73
   orig: 88, 73
   offset: 0, 0
   index: -1
 planeGreen2
   rotate: false
-  xy: 362, 2
+  xy: 586, 2
   size: 88, 73
   orig: 88, 73
   offset: 0, 0
   index: -1
 planeGreen3
   rotate: false
-  xy: 452, 2
+  xy: 676, 2
   size: 88, 73
   orig: 88, 73
   offset: 0, 0
   index: -1
 planeRed1
   rotate: false
-  xy: 542, 2
+  xy: 766, 2
   size: 88, 73
   orig: 88, 73
   offset: 0, 0
   index: -1
 planeRed2
   rotate: false
-  xy: 632, 2
+  xy: 804, 372
   size: 88, 73
   orig: 88, 73
   offset: 0, 0
   index: -1
 planeRed3
   rotate: false
-  xy: 804, 233
+  xy: 804, 297
   size: 88, 73
   orig: 88, 73
   offset: 0, 0
   index: -1
 planeYellow1
   rotate: false
-  xy: 674, 87
+  xy: 804, 222
   size: 88, 73
   orig: 88, 73
   offset: 0, 0
   index: -1
 planeYellow2
   rotate: false
-  xy: 804, 158
+  xy: 857, 147
   size: 88, 73
   orig: 88, 73
   offset: 0, 0
   index: -1
 planeYellow3
   rotate: false
-  xy: 764, 83
+  xy: 856, 72
   size: 88, 73
   orig: 88, 73
   offset: 0, 0
   index: -1
+shooting
+  rotate: false
+  xy: 856, 6
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 starBronze
   rotate: false
-  xy: 722, 47
+  xy: 2, 10
   size: 39, 38
   orig: 39, 38
   offset: 0, 0
   index: -1
 starGold
   rotate: false
-  xy: 722, 7
+  xy: 43, 10
   size: 39, 38
   orig: 39, 38
   offset: 0, 0
   index: -1
 starSilver
   rotate: false
-  xy: 763, 43
+  xy: 84, 10
   size: 39, 38
   orig: 39, 38
   offset: 0, 0

@@ -48,6 +48,7 @@ public class Animations {
             String regionName = "coin" + (i + 1);
             GameRenderer.bonus[i] = gameplayAtlas.findRegion(regionName);
         }
+
         GameRenderer.bonusAnim = new Animation<>(0.03f, GameRenderer.bonus);
         GameRenderer.bonusAnim.setPlayMode(Animation.PlayMode.LOOP);
     }

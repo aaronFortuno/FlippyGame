@@ -129,20 +129,22 @@ public class GameRenderer implements Disposable {
         debugCameraController.handleDebugInput(delta);
         debugCameraController.applyTo(camera);
 
-/*        if (Gdx.input.isTouched() && !controller.isGameOver()) {
-            Vector2 screenTouch = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-            Vector2 worldTouch = viewport.unproject(new Vector2(screenTouch));
-        }*/
-
         GdxUtils.clearScreen();
 
-        // Render scroll background and gameplay
-        updateBackground(delta);
-        propellerAnimationTime += delta;
+        // Stops background and propeller animations
+        if (!controller.isPaused())
+        {
+            // Render scroll background and gameplay
+            updateBackground(delta);
+            propellerAnimationTime += delta;
+        }
+
         renderGamePlay(delta);
 
         // Render debug graphics
         // renderDebug();
+
+
     }
 
     public void updateBackground(float delta) {
@@ -173,28 +175,35 @@ public class GameRenderer implements Disposable {
 
     /************** GAMEPLAY ***************/
     private void renderGamePlay(float delta) {
+
         viewport.apply();
         batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
 
         drawBackground();
         drawBullets(delta);
         drawPlayer(delta);
-        drawBonus(delta);
-        drawEnemies();
-
-        int lives = controller.getLives();
-        if (lives < GameConfig.PLAYER_START_LIVES) {
-            particleEffect1.draw(batch, delta);
-            if (lives <= 1) {
-                particleEffect2.draw(batch, delta);
-            }
+        if (!controller.isPaused()) {
+            drawBonus(delta);
         }
+        drawEnemies();
         batch.end();
 
         // Draw attenuated rectangle in case of paused game
         updateFade(delta);
-        updateGamePaused();
+
+        if (!controller.isPaused()) {
+            batch.begin();
+            int lives = controller.getLives();
+            if (lives < GameConfig.PLAYER_START_LIVES) {
+                particleEffect1.draw(batch, delta);
+                if (lives <= 1) {
+                    particleEffect2.draw(batch, delta);
+                }
+            }
+            batch.end();
+        }
     }
 
     private void drawBackground() {
@@ -376,18 +385,8 @@ public class GameRenderer implements Disposable {
     }
 
     /************* GAME PAUSED ***************/
-    private void updateGamePaused() {
-        if (screenFadeAlpha > 0f) {
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            renderer.begin(ShapeRenderer.ShapeType.Filled);
-            renderer.setColor(0, 0, 0, screenFadeAlpha);
-            renderer.rect(0, 0, GameConfig.GAME_WIDTH, GameConfig.GAME_HEIGHT);
-            renderer.end();
-            Gdx.gl.glDisable(GL20.GL_BLEND);
-        }
-    }
 
-    private void updateFade(float delta) {
+    public void updateFade(float delta) {
 
         // Show attenuated alpha pause game
         if (controller.isPaused()) {
@@ -400,6 +399,18 @@ public class GameRenderer implements Disposable {
                 screenFadeAlpha -= delta / GameConfig.FADE_DURATION;
                 screenFadeAlpha = Math.max(screenFadeAlpha, 0f);
             }
+        }
+        updateGamePaused();
+    }
+
+    private void updateGamePaused() {
+        if (screenFadeAlpha > 0f) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            renderer.begin(ShapeRenderer.ShapeType.Filled);
+            renderer.setColor(0, 0, 0, screenFadeAlpha);
+            renderer.rect(0, 0, GameConfig.GAME_WIDTH, GameConfig.GAME_HEIGHT);
+            renderer.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
         }
     }
 }

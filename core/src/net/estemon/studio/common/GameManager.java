@@ -47,6 +47,7 @@ public class GameManager {
     }
 
     public String getHighScoreString() { return String.valueOf(highScore); }
+    public int getHighScore() { return highScore; }
 
     /********* DIFFICULTY LEVEL *********/
     public void updateDifficulty(DifficultyLevel newDifficultyLevel) {

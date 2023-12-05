@@ -12,6 +12,9 @@ public class AssetPaths {
     // Sprites and UI by Kenney from https://www.kenney.nl/
     // CC0 1.0 DEED https://creativecommons.org/publicdomain/zero/1.0/
 
+    // Target icon by fjstudio from https://www.flaticon.com/authors/fjstudio
+    // Flaticon license
+
     // Coin sprites by Kexatchison from https://opengameart.org/content/2d-coin
     // CC0 1.0 DEED https://creativecommons.org/publicdomain/zero/1.0/
     public static final String GAMEPLAY_ATLAS = "gameplay.atlas";

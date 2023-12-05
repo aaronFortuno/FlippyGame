@@ -125,7 +125,7 @@ public class GameController {
     public void update(float delta) {
         // TODO handle game over
         if (isGameOver()) {
-            return;
+            checkFinalScore();
         }
 
         if (!isPaused) {
@@ -146,9 +146,6 @@ public class GameController {
             updateDisplayScore(delta);
             if (isPlayerCollidingWithEnemy()) {
                 lives--;
-                if (isGameOver()) {
-                    GameManager.INSTANCE.updateHighScore(score);
-                }
             }
         } else {
             music.setVolume(0.5f);
@@ -170,6 +167,9 @@ public class GameController {
     public double getPlayerRotationAngle() { return playerRotationAngle; }
     public int getLives() { return lives; }
     public int getDisplayScore() { return displayScore; }
+
+    public int getScore() { return score; }
+
     public boolean isPaused() { return isPaused; }
     public void setPaused(boolean isPaused) {
         this.isPaused = isPaused;
@@ -227,7 +227,7 @@ public class GameController {
         removePassedBullets();
     }
 
-    private void createNewBullet() {
+    public void createNewBullet() {
         float xPos = player.getX();
         float yPos = player.getY();
 
@@ -592,5 +592,27 @@ public class GameController {
                     displayScore + (int) (60 * delta)
             );
         }
+    }
+
+    /************** END GAME *****************/
+    public int checkFinalScore() {
+        if (!isPaused && isGameOver()) {
+            int highScore = GameManager.INSTANCE.getHighScore();
+            GameManager.INSTANCE.updateHighScore(score);
+            setPaused(true);
+
+            // Check and send
+            if (score < highScore - highScore / 20) {
+                System.out.println("[BAD!]");
+                return 0;
+            } else if (score < highScore + highScore / 20) {
+                System.out.println("[WELL DONE!]");
+                return 1;
+            } else {
+                System.out.println("[WOW!]");
+                return 2;
+            }
+        }
+        return -1;
     }
 }
