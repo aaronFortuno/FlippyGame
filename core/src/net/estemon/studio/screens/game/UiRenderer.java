@@ -172,15 +172,23 @@ public class UiRenderer extends ScreenAdapter {
     }
 
     private void updateLives(int lives) {
-        for (int i = 0; i < livesImages.length; i++) {
-            livesImages[i].setSize(
-                    livesTexture.getRegionWidth() / 2.5f,
-                    livesTexture.getRegionHeight() / 2.5f
-            );
-            if (i + 1 > lives) {
-                livesImages[i].setColor(1, 1, 1, 0.4f);
+        if (!controller.isPaused()) {
+            for (int i = 0; i < livesImages.length; i++) {
+                livesImages[i].setColor(1, 1, 1, 1);
+                livesImages[i].setSize(
+                        livesTexture.getRegionWidth() / 2.5f,
+                        livesTexture.getRegionHeight() / 2.5f
+                );
+                if (i + 1 > lives) {
+                    livesImages[i].setColor(1, 1, 1, 0.4f);
+                }
+            }
+        } else {
+            for (Image image : livesImages) {
+                image.setColor(1, 1, 1, 0.1f);
             }
         }
+
     }
 
     @Override
