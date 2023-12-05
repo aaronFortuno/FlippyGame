@@ -193,6 +193,8 @@ public class GameRenderer implements Disposable {
         // Draw attenuated rectangle in case of paused game
         updateFade(delta);
 
+        // Is necessary to don't render particle effects if
+        // we want to create a fading effect on the screen!
         if (!controller.isPaused()) {
             batch.begin();
             int lives = controller.getLives();
