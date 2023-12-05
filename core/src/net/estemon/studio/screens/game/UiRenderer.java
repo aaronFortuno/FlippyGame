@@ -261,13 +261,14 @@ public class UiRenderer extends ScreenAdapter {
 
             shownEnd = true;
 
-            // Hide other screen elements
-            pauseButtonImage.setVisible(false);
-            upButtonImage.setVisible(false);
-            downButtonImage.setVisible(false);
-            shootButtonImage.setVisible(false);
+            // Hide other screen elements, if there are in the UI
+            if (upButtonImage != null) {
+                pauseButtonImage.setVisible(false);
+                upButtonImage.setVisible(false);
+                downButtonImage.setVisible(false);
+                shootButtonImage.setVisible(false);
+            }
         }
-
     }
 
     @Override
