@@ -130,6 +130,7 @@ public class GameRenderer implements Disposable {
 
         GdxUtils.clearScreen();
 
+        // TODO PART 4
         // Stops background and propeller animations
         if (!controller.isPaused())
         {
@@ -142,8 +143,6 @@ public class GameRenderer implements Disposable {
 
         // Render debug graphics
         // renderDebug();
-
-
     }
 
     public void updateBackground(float delta) {
@@ -183,6 +182,8 @@ public class GameRenderer implements Disposable {
         drawBackground();
         drawBullets();
         drawPlayer(delta);
+
+        // TODO PART 4
         if (!controller.isPaused()) {
             drawBonus(delta);
         }
@@ -192,6 +193,7 @@ public class GameRenderer implements Disposable {
         // Draw attenuated rectangle in case of paused game
         updateFade(delta);
 
+        // TODO PART 4
         // Is necessary to don't render particle effects if
         // we want to create a fading effect on the screen!
         if (!controller.isPaused()) {
@@ -231,6 +233,7 @@ public class GameRenderer implements Disposable {
         }
     }
 
+    // TODO PART 2
     private void drawBullets() {
         for (Bullet bullet : controller.getBullets()) {
             float originX = GameConfig.BULLET_WIDTH / 2;
@@ -272,6 +275,7 @@ public class GameRenderer implements Disposable {
         }
     }
 
+    // TODO PART 3
     private void drawBonus(float delta) {
         for (Bonus bonus : controller.getBonuses()) {
             float timer = bonus.getTimer();

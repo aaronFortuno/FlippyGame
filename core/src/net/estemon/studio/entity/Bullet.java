@@ -8,6 +8,7 @@ import net.estemon.studio.config.GameConfig;
 
 public class Bullet extends GameObjectBase implements Pool.Poolable {
 
+    // TODO PART 2
     private float xSpeed = GameConfig.BULLET_INIT_SPEED;
     private float ySpeed;
 

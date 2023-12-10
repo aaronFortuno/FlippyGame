@@ -44,10 +44,12 @@ public class GameController {
     private float enemyTimer;
     private Pool<Enemy> enemiesPool;
 
+    // TODO PART 2
     // Bullets
     private final Array<Bullet> bullets = new Array<>();
     private Pool<Bullet> bulletPool;
 
+    // TODO PART 3
     // Bonus and scoring
     private final Array<Bonus> bonuses = new Array<>();
     private float bonusTimer;
@@ -101,9 +103,11 @@ public class GameController {
                 GameConfig.WORLD_HEIGHT
         );
 
+        // TODO PART 2
         // Init bullet pool
         bulletPool = Pools.get(Bullet.class, GameConfig.BULLET_MAX_COUNT);
 
+        // TODO PART 3
         // Init bonus pool
         bonusesPool = Pools.get(Bonus.class, GameConfig.BONUS_MAX_COUNT);
 
@@ -113,6 +117,7 @@ public class GameController {
         propellerSound.setVolume(engine, 0.45f);
         propellerSound.setPitch(engine, 1f);
 
+        // TODO PART 3
         bonusSound = assetManager.get(AssetDescriptors.SOUND_BONUS);
         crashSound = assetManager.get(AssetDescriptors.SOUND_CRASH);
     }
@@ -122,6 +127,7 @@ public class GameController {
             checkFinalScore();
         }
 
+        // TODO PART 4
         if (!isPaused) {
             if (music.getVolume() != 1.0f) {
                 music.setVolume(1.0f);
@@ -165,6 +171,8 @@ public class GameController {
     public int getScore() { return score; }
 
     public boolean isPaused() { return isPaused; }
+
+    // TODO PART 4
     public void setPaused(boolean isPaused) {
         this.isPaused = isPaused;
     }
@@ -210,6 +218,7 @@ public class GameController {
     }
 
 
+    // TODO PART 2
     // Private methods
     /************** BULLETS **************/
     private void updateBullets(float delta) {
@@ -310,6 +319,7 @@ public class GameController {
         inputY1 = screenHeight - Gdx.input.getY(); // Inverse Y axis system
         boolean isTouched = Gdx.input.isTouched();
 
+        // TODO PART 2
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             createNewBullet();
         }
@@ -438,6 +448,7 @@ public class GameController {
         }
     }
 
+    // TODO PART 3
     /*************** BONUS ****************/
     private void updateBonus(float delta) {
         for (Bonus bonus : bonuses) {

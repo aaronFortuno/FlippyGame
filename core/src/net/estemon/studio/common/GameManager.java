@@ -29,6 +29,7 @@ public class GameManager {
         boolean showButtons = PREFS.getBoolean(SHOW_BUTTONS_KEY, false);
     }
 
+    // TODO PART 5
     /********* HIGH SCORE *********/
     public void updateHighScore(int score) {
         if (score < highScore) {

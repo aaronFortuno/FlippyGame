@@ -8,6 +8,7 @@ import net.estemon.studio.config.GameConfig;
 
 public abstract class GameObjectBase {
 
+    // TODO PART 1
     private float x;
     private float y;
 

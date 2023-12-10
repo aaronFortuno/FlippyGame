@@ -18,6 +18,7 @@ import net.estemon.studio.screens.common.BaseScreen;
 
 public class HighScoreScreen extends BaseScreen {
 
+    // TODO PART 5
     private final AssetManager assetManager;
 
     public HighScoreScreen(FlippyGame game) {

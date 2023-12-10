@@ -12,6 +12,7 @@ import net.estemon.studio.config.GameConfig;
 
 public class Bonus extends GameObjectBase implements Pool.Poolable {
 
+    // TODO PART 3
     private float xSpeed;
 
     private boolean hit;

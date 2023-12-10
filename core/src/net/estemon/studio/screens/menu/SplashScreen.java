@@ -20,6 +20,7 @@ import net.estemon.studio.screens.game.GameScreen;
 
 public class SplashScreen extends BaseScreen {
 
+    // TODO PART 5
     private final AssetManager assetManager;
 
     private GameMusic music;

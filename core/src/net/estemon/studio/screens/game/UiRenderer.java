@@ -76,6 +76,7 @@ public class UiRenderer extends ScreenAdapter {
             livesTable.add(livesImages[i]).size(30).pad(5).right();
         }
 
+        // TODO PART 4
         // Pause button
         TextureRegion pauseButtonTexture = gameplayAtlas.findRegion(RegionNames.PAUSE_BUTTON);
         pauseButtonImage = new Image(pauseButtonTexture);
@@ -130,6 +131,7 @@ public class UiRenderer extends ScreenAdapter {
                 }
             });
 
+            // TODO PART 2
             TextureRegion shootButtonTexture = gameplayAtlas.findRegion(RegionNames.SHOOT_BUTTON);
             shootButtonImage = new Image(shootButtonTexture);
 
@@ -165,6 +167,8 @@ public class UiRenderer extends ScreenAdapter {
     }
     @Override
     public void render(float delta) {
+
+        // TODO PART 3
         String scoreText = "SCORE: " + controller.getDisplayScore();
         if (!controller.isPaused()) {
             scoreLabel.setText(scoreText);
@@ -173,6 +177,8 @@ public class UiRenderer extends ScreenAdapter {
         }
 
         updateLives(controller.getLives());
+
+        // TODO PART 4
         updatePause();
 
         if (controller.isGameOver()) {
@@ -183,6 +189,7 @@ public class UiRenderer extends ScreenAdapter {
         stage.draw();
     }
 
+    // TODO PART 4
     private void updatePause() {
         pauseButtonImage.setVisible(!controller.isPaused());
     }
@@ -206,6 +213,7 @@ public class UiRenderer extends ScreenAdapter {
         }
     }
 
+    // TODO PART 5
     private void showFinalScore() {
         if (!shownEnd) {
             Table table = new Table();
@@ -217,6 +225,7 @@ public class UiRenderer extends ScreenAdapter {
 
             TypingLabel scoreLabel = new TypingLabel("{SLIDE}{HANG=1;0.5}" + score + " points!", skin, "title-font");
 
+            // TODO PART 5
             String message;
             switch (controller.checkFinalScore()) {
                 case 0:
