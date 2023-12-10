@@ -118,7 +118,6 @@ public class GameController {
     }
 
     public void update(float delta) {
-        // TODO handle game over
         if (isGameOver()) {
             checkFinalScore();
         }
