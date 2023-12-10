@@ -12,7 +12,6 @@ import net.estemon.studio.config.GameConfig;
 
 public class Bonus extends GameObjectBase implements Pool.Poolable {
 
-    private DifficultyLevel difficultyLevel;
     private float xSpeed;
 
     private boolean hit;
@@ -26,7 +25,7 @@ public class Bonus extends GameObjectBase implements Pool.Poolable {
     public Bonus() {
         super(GameConfig.BONUS_BOUNDS);
         setSize(GameConfig.BONUS_SIZE, GameConfig.BONUS_SIZE);
-        difficultyLevel = GameManager.INSTANCE.getDifficultyLevel();
+        DifficultyLevel difficultyLevel = GameManager.INSTANCE.getDifficultyLevel();
     }
 
     public void setKind(BonusKind kind) {

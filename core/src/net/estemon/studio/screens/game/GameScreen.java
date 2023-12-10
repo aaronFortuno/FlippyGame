@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import net.estemon.studio.FlippyGame;
 import net.estemon.studio.common.GameMusic;
 import net.estemon.studio.screens.common.BaseScreen;
-import net.estemon.studio.screens.menu.SplashScreen;
 
 public class GameScreen extends BaseScreen {
 
@@ -15,7 +14,7 @@ public class GameScreen extends BaseScreen {
     private GameController controller;
     private GameRenderer renderer;
     private UiRenderer uiRenderer;
-    private GameMusic music;
+    private final GameMusic music;
 
     public GameScreen(FlippyGame game, GameMusic music) {
         super(game);

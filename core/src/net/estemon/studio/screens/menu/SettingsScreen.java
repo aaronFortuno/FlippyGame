@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -24,7 +23,7 @@ import net.estemon.studio.screens.common.BaseScreen;
 
 public class SettingsScreen extends BaseScreen {
 
-    private AssetManager assetManager;
+    private final AssetManager assetManager;
 
     private ButtonGroup<CheckBox> diffCheckBoxGroup;
     private CheckBox easy;
@@ -56,8 +55,6 @@ public class SettingsScreen extends BaseScreen {
 
         // Title label
         TypingLabel titleLabel = new TypingLabel("settings", skin, "title-font");
-
-        Label label = new Label("DIFFICULTY", skin);
 
         // Difficulty checkboxes
         easy = checkBox(DifficultyLevel.EASY.name(), skin);

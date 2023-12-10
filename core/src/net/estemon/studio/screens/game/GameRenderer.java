@@ -51,7 +51,6 @@ public class GameRenderer implements Disposable {
 
     // Pause game
     private float screenFadeAlpha = 0f;
-    private boolean isFading;
 
     // Particles
     private ParticleEffect particleEffect1;
@@ -182,7 +181,7 @@ public class GameRenderer implements Disposable {
         batch.begin();
 
         drawBackground();
-        drawBullets(delta);
+        drawBullets();
         drawPlayer(delta);
         if (!controller.isPaused()) {
             drawBonus(delta);
@@ -232,7 +231,7 @@ public class GameRenderer implements Disposable {
         }
     }
 
-    private void drawBullets(float delta) {
+    private void drawBullets() {
         for (Bullet bullet : controller.getBullets()) {
             float originX = GameConfig.BULLET_WIDTH / 2;
             float originY = GameConfig.BULLET_HEIGHT / 2;

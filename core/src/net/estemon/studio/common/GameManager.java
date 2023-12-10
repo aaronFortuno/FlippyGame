@@ -17,7 +17,6 @@ public class GameManager {
 
     private int highScore;
     private DifficultyLevel difficultyLevel;
-    private boolean showButtons;
 
     // SINGLETON, not instantiable
     private GameManager() {
@@ -27,7 +26,7 @@ public class GameManager {
         String difficultyName = PREFS.getString(DIFFICULTY_KEY, DifficultyLevel.EASY.name());
         difficultyLevel = DifficultyLevel.valueOf(difficultyName);
 
-        showButtons = PREFS.getBoolean(SHOW_BUTTONS_KEY, false);
+        boolean showButtons = PREFS.getBoolean(SHOW_BUTTONS_KEY, false);
     }
 
     /********* HIGH SCORE *********/

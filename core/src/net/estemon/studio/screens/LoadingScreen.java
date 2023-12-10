@@ -1,7 +1,6 @@
 package net.estemon.studio.screens;
 
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;

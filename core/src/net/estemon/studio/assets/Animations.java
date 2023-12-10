@@ -1,14 +1,11 @@
 package net.estemon.studio.assets;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import net.estemon.studio.screens.game.GameRenderer;
-
-import jdk.tools.jlink.internal.plugins.StripNativeCommandsPlugin;
 
 public class Animations {
 

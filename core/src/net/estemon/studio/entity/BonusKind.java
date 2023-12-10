@@ -13,7 +13,7 @@ public enum BonusKind {
             GameConfig.BRONZE_BONUS
     );
 
-    private int value;
+    private final int value;
 
     BonusKind (int value) {
         this.value = value;

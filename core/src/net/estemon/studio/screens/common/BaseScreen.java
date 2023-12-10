@@ -1,7 +1,6 @@
 package net.estemon.studio.screens.common;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,8 +12,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import net.estemon.studio.FlippyGame;
 import net.estemon.studio.assets.AssetPaths;
 import net.estemon.studio.config.GameConfig;
-import net.estemon.studio.entity.Background;
-import net.estemon.studio.screens.game.GameController;
 import net.estemon.studio.utils.GdxUtils;
 
 public abstract class BaseScreen extends ScreenAdapter {
@@ -34,10 +31,6 @@ public abstract class BaseScreen extends ScreenAdapter {
         viewport = new FitViewport(GameConfig.GAME_WIDTH, GameConfig.GAME_HEIGHT);
         stage = new Stage(viewport, game.getBatch());
         skin = assetManager.get(AssetPaths.UI_SKIN);
-
-        // Background background = new Background(0, 0, 100, 100, 1, assetManager);
-
-        // stage.addActor(background);
 
         Gdx.input.setInputProcessor(stage);
         stage.addActor(createUi()); // UNCOMMENT WHEN READY TO ADD ACTOR
@@ -65,13 +58,5 @@ public abstract class BaseScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         stage.dispose();
-    }
-
-    public Stage getStage() {
-        return stage;
-    }
-
-    public Viewport getViewport() {
-        return viewport;
     }
 }

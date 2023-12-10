@@ -16,8 +16,6 @@ import net.estemon.studio.assets.RegionNames;
 import net.estemon.studio.common.GameManager;
 import net.estemon.studio.screens.common.BaseScreen;
 
-import org.w3c.dom.Text;
-
 public class HighScoreScreen extends BaseScreen {
 
     private final AssetManager assetManager;

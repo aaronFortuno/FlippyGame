@@ -8,11 +8,11 @@ import com.badlogic.gdx.math.Vector2;
 
 public class DebugCameraController {
 
-    private Vector2 position = new Vector2();
-    private Vector2 startPosition = new Vector2();
+    private final Vector2 position = new Vector2();
+    private final Vector2 startPosition = new Vector2();
     private float zoom = 1f;
 
-    private DebugCameraConfig config;
+    private final DebugCameraConfig config;
 
     public DebugCameraController() {
         config = new DebugCameraConfig();

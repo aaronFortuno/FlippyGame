@@ -3,7 +3,6 @@ package net.estemon.studio.screens.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -25,30 +24,24 @@ import net.estemon.studio.common.GameManager;
 import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.screens.menu.SplashScreen;
 
-import javax.imageio.stream.ImageInputStream;
-
 public class UiRenderer extends ScreenAdapter {
 
-    private FlippyGame game;
-    private AssetManager assetManager;
-    private GameController controller;
+    private final FlippyGame game;
+    private final AssetManager assetManager;
+    private final GameController controller;
     protected Stage stage;
-    private Skin skin;
+    private final Skin skin;
     private Label scoreLabel;
 
     private TextureRegion livesTexture;
     private Image[] livesImages;
 
-    private TextureRegion pauseButtonTexture;
     private Image pauseButtonImage;
 
-    private TextureRegion upButtonTexture;
     private Image upButtonImage;
 
-    private TextureRegion downButtonTexture;
     private Image downButtonImage;
 
-    private TextureRegion shootButtonTexture;
     private Image shootButtonImage;
 
     private boolean shownEnd;
@@ -84,7 +77,7 @@ public class UiRenderer extends ScreenAdapter {
         }
 
         // Pause button
-        pauseButtonTexture = gameplayAtlas.findRegion(RegionNames.PAUSE_BUTTON);
+        TextureRegion pauseButtonTexture = gameplayAtlas.findRegion(RegionNames.PAUSE_BUTTON);
         pauseButtonImage = new Image(pauseButtonTexture);
         pauseButtonImage.setColor(1, 1, 1, 0.5f);
 
@@ -98,8 +91,8 @@ public class UiRenderer extends ScreenAdapter {
         // UI Buttons
         boolean showUiButtons = GameManager.INSTANCE.getShowButtons();
         if (showUiButtons) {
-            upButtonTexture = gameplayAtlas.findRegion(RegionNames.UP_BUTTON);
-            downButtonTexture = gameplayAtlas.findRegion(RegionNames.DOWN_BUTTON);
+            TextureRegion upButtonTexture = gameplayAtlas.findRegion(RegionNames.UP_BUTTON);
+            TextureRegion downButtonTexture = gameplayAtlas.findRegion(RegionNames.DOWN_BUTTON);
 
             upButtonImage = new Image(upButtonTexture);
             upButtonImage.setColor(1, 1, 1, 0.5f);
@@ -137,7 +130,7 @@ public class UiRenderer extends ScreenAdapter {
                 }
             });
 
-            shootButtonTexture = gameplayAtlas.findRegion(RegionNames.SHOOT_BUTTON);
+            TextureRegion shootButtonTexture = gameplayAtlas.findRegion(RegionNames.SHOOT_BUTTON);
             shootButtonImage = new Image(shootButtonTexture);
 
             shootButtonImage.addListener(new ClickListener() {
@@ -191,11 +184,7 @@ public class UiRenderer extends ScreenAdapter {
     }
 
     private void updatePause() {
-        if (controller.isPaused()) {
-            pauseButtonImage.setVisible(false);
-        } else {
-            pauseButtonImage.setVisible(true);
-        }
+        pauseButtonImage.setVisible(!controller.isPaused());
     }
 
     private void updateLives(int lives) {
@@ -226,7 +215,7 @@ public class UiRenderer extends ScreenAdapter {
 
             int score = controller.getScore();
 
-            TypingLabel scoreLabel = new TypingLabel("{SLIDE}{HANG=1;0.5}" + String.valueOf(score) + " points!", skin, "title-font");
+            TypingLabel scoreLabel = new TypingLabel("{SLIDE}{HANG=1;0.5}" + score + " points!", skin, "title-font");
 
             String message;
             switch (controller.checkFinalScore()) {

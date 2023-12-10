@@ -11,9 +11,8 @@ import net.estemon.studio.config.GameConfig;
 
 public class Enemy extends GameObjectBase implements Pool.Poolable {
 
-    private DifficultyLevel difficultyLevel;
+    private final DifficultyLevel difficultyLevel;
 
-    private float xSpeed;
     private float ySpeed;
     private boolean hit;
     private float timer = 0f;
@@ -74,7 +73,6 @@ public class Enemy extends GameObjectBase implements Pool.Poolable {
     }
 
     public void setXSpeed(float xSpeed) {
-        this.xSpeed = xSpeed;
     }
 
     public void drawDebug(ShapeRenderer renderer) {

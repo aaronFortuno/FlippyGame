@@ -21,12 +21,11 @@ import net.estemon.studio.entity.BonusKind;
 import net.estemon.studio.entity.Bullet;
 import net.estemon.studio.entity.Enemy;
 import net.estemon.studio.entity.Player;
-import net.estemon.studio.screens.menu.SplashScreen;
 
 public class GameController {
 
     private final AssetManager assetManager;
-    private GameMusic music;
+    private final GameMusic music;
 
     private Background background;
     private DifficultyLevel difficultyLevel;
@@ -44,7 +43,6 @@ public class GameController {
     private final Array<Enemy> enemies = new Array<>();
     private float enemyTimer;
     private Pool<Enemy> enemiesPool;
-    private boolean isEnemyMovingY = GameConfig.IS_ENEMY_MOVING_Y;
 
     // Bullets
     private final Array<Bullet> bullets = new Array<>();
@@ -56,21 +54,18 @@ public class GameController {
     private Pool<Bonus> bonusesPool;
     private float scoreTimer;
 
-    private long bonusPitch;
     private Sound bonusSound;
 
     private int score;
     private int displayScore;
 
     // Sounds
-    private Sound hit;
     private Sound propellerSound;
     private long engine;
     private Sound crashSound;
 
     private boolean shouldGoUp;
     private boolean shouldGoDown;
-    private boolean shouldGoStraight;
 
 
     public GameController(FlippyGame game, GameMusic music) {
@@ -201,7 +196,6 @@ public class GameController {
     }
 
     public void setShouldGoStraight(boolean shouldGoStraight) {
-        this.shouldGoStraight = shouldGoStraight;
         if (shouldGoStraight) {
             setShouldGoUp(false);
             setShouldGoDown(false);
@@ -294,7 +288,7 @@ public class GameController {
                 System.out.println("[BONUS]");
                 bonus.setCollided(true);
 
-                bonusPitch = bonusSound.play(0.7f);
+                long bonusPitch = bonusSound.play(0.7f);
 
                 // Set pitch of bonus sound related to bonus kind
                 if (bonus.getKind() == BonusKind.GOLD) {
@@ -460,7 +454,7 @@ public class GameController {
             float min = 0f + GameConfig.BONUS_SIZE / 2;
             float max = GameConfig.WORLD_HEIGHT - GameConfig.BONUS_SIZE / 2;
             float bonusX = GameConfig.WORLD_WIDTH;
-            float bonusY = MathUtils.random(min, max);;
+            float bonusY = MathUtils.random(min, max);
             Bonus bonus = bonusesPool.obtain();
 
             int bonusType = MathUtils.random(0, 10);
@@ -497,6 +491,7 @@ public class GameController {
         for (Enemy enemy : enemies) {
 
             // Move Y axis enemies depending on configuration
+            boolean isEnemyMovingY = GameConfig.IS_ENEMY_MOVING_Y;
             if (isEnemyMovingY) {
                 if (enemy.isGoUp()) {
                     enemy.goUp(delta);

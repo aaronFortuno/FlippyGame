@@ -20,7 +20,7 @@ public class DebugCameraConfig {
     private static final String DOWN_KEY = "downKey";
 
     private static final String ZOOM_IN_KEY = "zoomInKey";
-    private static final String ZOOM_OUT_KEY = "zommOutKey";
+    private static final String ZOOM_OUT_KEY = "zoomOutKey";
     private static final String RESET_KEY = "resetKey";
 
     // defaults
