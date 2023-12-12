@@ -390,10 +390,9 @@ public class GameRenderer implements Disposable {
     }
 
     /************* GAME PAUSED ***************/
-
     public void updateFade(float delta) {
 
-        // Show attenuated alpha pause game
+        // Show attenuated alpha on pause game
         if (controller.isPaused()) {
             if (screenFadeAlpha < 0.5f) {
                 screenFadeAlpha += delta / GameConfig.FADE_DURATION;
